@@ -1,18 +1,12 @@
 import React from "react";
-import Home from "./Pages/Home";
-import Auth from "./Pages/Auth";
-import Aplication from "./Pages/Aplication";
+
 import { Route, Routes } from "react-router-dom";
-import Joblisting from "./Pages/Listing";
+import ChakriLanding from "./Pages/Home";
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
-        
-        <Route path="/listing" element={<Joblisting />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/application" element={<Aplication />} />
+        <Route path="/" element={<ChakriLanding />} />
       </Routes>
     </>
   );
