@@ -1,22 +1,7 @@
 import React, { useState } from "react";
+import Navbar from "../components/layout/Navbar";
 
-// --- GLOBAL STYLES ---
-const GlobalStyles = () => (
-  <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
-    body { font-family: 'Inter', sans-serif; }
-    h1, h2, h3, h4, h5, h6 { font-family: 'Plus Jakarta Sans', sans-serif; }
-    
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-    .custom-checkbox:checked + div { background-color: #10b981; border-color: #10b981; }
-    .custom-checkbox:checked + div svg { display: block; }
-  `}</style>
-);
 
 // --- ICONS ---
 const Icons = {
@@ -114,25 +99,7 @@ const JOBS = [
 
 // --- COMPONENTS ---
 
-const Navbar = () => (
-  <nav className="sticky top-0 z-50 bg-[#0F172A]/90 backdrop-blur-md border-b border-white/10 shadow-lg">
-    <div className="container mx-auto px-6 h-20 flex justify-between items-center">
-      <div className="text-2xl font-bold text-white flex items-center gap-2 tracking-tight">
-        <div className="w-8 h-8 bg-brand-green rounded-lg flex items-center justify-center text-white text-xs shadow-lg shadow-emerald-500/30">DJ</div>
-        Dejob.
-      </div>
-      <div className="hidden md:flex gap-8 text-slate-300 font-medium text-sm">
-        {['Find Jobs', 'Companies', 'Salaries', 'Career Advice'].map(link => (
-            <a key={link} href="#" className="hover:text-white transition-colors">{link}</a>
-        ))}
-      </div>
-      <div className="flex gap-4 items-center">
-        <a href="#" className="hidden md:block text-slate-300 hover:text-white text-sm font-medium">Log in</a>
-        <a href="#" className="bg-brand-green hover:bg-emerald-600 text-white text-sm font-bold px-5 py-2 rounded-full transition-all">Post a Job</a>
-      </div>
-    </div>
-  </nav>
-);
+
 
 const FilterSection = ({ title, options }) => (
   <div className="mb-8">
@@ -199,9 +166,7 @@ const JobCard = ({ job }) => (
 const DejobListing = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 selection:bg-brand-green selection:text-white">
-      <GlobalStyles />
-      <Navbar />
-
+<Navbar/>
       {/* --- HEADER SEARCH --- */}
       <div className="relative bg-[#0F172A] pt-16 pb-32 overflow-hidden">
         {/* Header Background Image */}
