@@ -166,7 +166,7 @@
                 </svg>
                 <input
                   type="text"
-                  placeholder="New York, USA"
+                  placeholder="Berlin, Germany"
                   className="w-full outline-none text-sm text-gray-700 placeholder-gray-400"
                 />
               </div>
