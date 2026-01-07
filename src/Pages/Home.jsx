@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../components/layout/Navbar";
-import { Footer } from "../components/layout/Footer";
+import  Footer  from "../components/layout/Footer";
 
 import Hero from "../components/home/Hero";
 import Recruiters from "../components/home/Recruiters";
@@ -13,22 +13,14 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className="font-sans bg-gray-50 text-gray-800">
-        <Hero />
-
-        <Recruiters />
-
-        <WhyChoose />
-
-        <TopCites />
-
-        <LatestOpportunities />
-        <SalaryEstimate />
-        <SucessStories />
-
-        {/* ==================== FOOTER ==================== */}
-        <Footer />
-      </div>
+      <Hero />
+      <Recruiters />
+      <WhyChoose />
+      <TopCites />
+      <LatestOpportunities />
+      <SalaryEstimate />
+      <SucessStories />
+      <Footer />
     </>
   );
 };

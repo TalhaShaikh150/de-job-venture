@@ -5,7 +5,7 @@ const Searchbar = () => {
     <>
       {" "}
       {/* Search Bar */}
-      <div className="bg-white p-2 rounded-lg shadow-lg w-full max-w-4xl flex flex-col md:flex-row items-center gap-2">
+      <div className="bg-white mx-auto p-2 rounded-lg shadow-lg w-full max-w-4xl flex flex-col md:flex-row items-center gap-2">
         {/* Keyword Input */}
         <div className="flex-1 flex items-center px-4 py-3 w-full border-b md:border-b-0 md:border-r border-gray-200">
           <svg
