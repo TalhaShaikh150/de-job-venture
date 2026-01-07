@@ -15,7 +15,7 @@ function AboutUs() {
           </span>
           <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
             We connect the world's <br />
-            <span class="text-brand-green">untapped potential.</span>
+            <span class="text-brand-green">untapped potential</span>
           </h1>
         </div>
       </div>
