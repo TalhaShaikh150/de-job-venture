@@ -8,4 +8,16 @@
 /* 
    If you had a custom class causing the error, remove it 
    or ensure the config above is saved.
-*/
+*/@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+/* Pause animation on hover */
+.group:hover .animate-scroll {
+  animation-play-state: paused;
+}
