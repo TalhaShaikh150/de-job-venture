@@ -69,6 +69,10 @@ const Navbar = () => {
 
           {/* Desktop Auth (Hidden on Mobile) */}
           <div className="hidden md:flex gap-6 items-center">
+            <Link to="/login" className="text-sm font-semibold text-gray-300 hover:text-white transition-colors">Sign In</Link>
+            <Link 
+              to="/post-job" 
+              className="px-6 py-3 bg-brand-green text-white font-bold rounded hover:bg-lime-600 transition"
             <Link
               to="/login"
               className="text-sm font-semibold text-gray-300 hover:text-white transition-colors"
@@ -79,7 +83,7 @@ const Navbar = () => {
               to="/post-job"
               className="bg-brand-green hover:bg-emerald-600 text-white text-xs font-bold px-6 py-3 rounded-full shadow-lg shadow-brand-green/20 hover:shadow-brand-green/40 hover:-translate-y-0.5 transition-all"
             >
-              Post a Job
+              Register
             </Link>
           </div>
 
