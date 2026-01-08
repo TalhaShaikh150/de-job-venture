@@ -31,7 +31,7 @@ function SignUp() {
           <input type="password" className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300" placeholder="Create a password" />
         </div>
 
-        <button className="w-full py-4 bg-brand-dark hover:bg-brand-green text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all">
+        <button className="w-full py-4 bg-brand-dark hover:bg-brand`-green text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all">
           Create Account
         </button>
 
