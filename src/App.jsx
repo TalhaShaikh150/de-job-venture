@@ -7,7 +7,7 @@ import AboutUs from "./pages/AboutUs";
 
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
-import AuthLayout from "./Pages/auth/AuthLayout";
+import AuthLayout from "./pages/auth/AuthLayout";
 
 function App() {
   return (
