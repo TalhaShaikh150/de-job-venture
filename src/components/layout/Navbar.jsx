@@ -76,7 +76,7 @@ const Navbar = () => {
               Sign In
             </Link>
             <Link
-              to="/post-job"
+              to="/signup"
               className="bg-brand-green hover:bg-emerald-600 text-white text-xs font-bold px-6 py-3 rounded-full shadow-lg shadow-brand-green/20 hover:shadow-brand-green/40 hover:-translate-y-0.5 transition-all"
             >
               Register
