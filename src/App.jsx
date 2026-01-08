@@ -1,12 +1,12 @@
 import React from "react";
 
 import { Routes, Route } from "react-router-dom";
-import Home from "./Pages/Home";
-import DejobSearch from "./Pages/JobListings";
-import AboutUs from "./Pages/AboutUs";
+import Home from "./pages/Home";
+import DejobSearch from "./pages/JobListings";
+import AboutUs from "./pages/AboutUs";
 
-import Login from "./Pages/auth/Login";
-import SignUp from "./Pages/auth/SignUp";
+import Login from "./pages/auth/Login";
+import SignUp from "./pages/auth/SignUp";
 import AuthLayout from "./Pages/auth/AuthLayout";
 
 function App() {
