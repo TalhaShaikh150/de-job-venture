@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-function Login({ toggle, setToggle }) {
+function Login() {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-10">
@@ -31,10 +32,10 @@ function Login({ toggle, setToggle }) {
               <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-brand-dark focus:ring-brand-dark" />
               <span className="text-sm text-slate-600">Remember me</span>
             </label>
-            <a href="#" className="text-sm font-bold text-brand-green hover:underline">Recover password</a>
+            <Link to="/auth/forgot-password" className="text-sm font-bold text-brand-green hover:underline">Recover password</Link>
         </div>
 
-        <button className="w-full py-4 bg-brand-dark hover:bg-slate-800 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all">
+        <button className="w-full py-4 bg-brand-dark hover:bg-brand-green text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all">
           Sign In
         </button>
 
@@ -46,7 +47,7 @@ function Login({ toggle, setToggle }) {
 
       <div className="mt-10 text-center border-t border-slate-100 pt-6">
         <p className="text-slate-500">
-          Don't have an account? <button onClick={() => setToggle("signUp")} className="text-brand-dark font-bold hover:underline">Sign up</button>
+          Don't have an account? <Link to="/signup" className="text-brand-dark font-bold hover:underline">Sign up</Link>
         </p>
       </div>
     </div>

@@ -1,10 +1,13 @@
 import React from "react";
 
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./Pages/Home";
 import DejobSearch from "./Pages/JobListings";
 import AboutUs from "./Pages/AboutUs";
-import LoginSignUp from "./Pages/LoginSignUp";
+
+import Login from "./Pages/auth/Login";
+import SignUp from "./Pages/auth/SignUp";
+import AuthLayout from "./Pages/auth/AuthLayout";
 
 function App() {
   return (
@@ -13,7 +16,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/listing" element={<DejobSearch />} />
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/login" element={<LoginSignUp />} />
+
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+        </Route>
       </Routes>
     </>
   );

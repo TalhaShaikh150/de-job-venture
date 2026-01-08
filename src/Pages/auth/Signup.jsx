@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-function SignUp({ toggle, setToggle }) {
+function SignUp() {
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-10">
         <h1 className="text-4xl font-extrabold text-slate-900 mb-2">Create Account</h1>
         <p className="text-slate-500">Start your journey with Dejob today.</p>
@@ -12,11 +13,11 @@ function SignUp({ toggle, setToggle }) {
         <div className="grid grid-cols-2 gap-4">
            <div className="group">
              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">First Name</label>
-             <input type="text" className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300" placeholder="John" />
+             <input type="text" className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all" placeholder="John" />
            </div>
            <div className="group">
              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Last Name</label>
-             <input type="text" className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300" placeholder="Doe" />
+             <input type="text" className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all" placeholder="Doe" />
            </div>
         </div>
 
@@ -30,7 +31,7 @@ function SignUp({ toggle, setToggle }) {
           <input type="password" className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300" placeholder="Create a password" />
         </div>
 
-        <button className="w-full py-4 bg-brand-dark hover:bg-slate-800 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all">
+        <button className="w-full py-4 bg-brand-dark hover:bg-brand-green text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all">
           Create Account
         </button>
 
@@ -40,12 +41,14 @@ function SignUp({ toggle, setToggle }) {
         </button>
       </form>
 
+
       <div className="mt-10 text-center border-t border-slate-100 pt-6">
         <p className="text-slate-500">
-          Already have an account? <button onClick={() => setToggle("login")} className="text-brand-dark font-bold hover:underline">Log In</button>
+          Already have an account? <Link to="/login" className="text-brand-dark font-bold hover:underline">Log In</Link>
         </p>
       </div>
     </div>
+  
   );
 }
 
