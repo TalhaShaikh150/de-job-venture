@@ -1,13 +1,13 @@
 import React from "react";
 
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import DejobSearch from "./pages/JobListings";
-import AboutUs from "./pages/AboutUs";
+import Home from "./views/Home";
+import DejobSearch from "./views/JobListings";
+import AboutUs from "./views/AboutUs";
 
-import Login from "./pages/auth/Login";
-import SignUp from "./pages/auth/SignUp";
-import AuthLayout from "./pages/auth/AuthLayout";
+import Login from "./views/auth/Login";
+import SignUp from "./views/auth/SignUp";
+import AuthLayout from "./views/auth/AuthLayout";
 
 function App() {
   return (
