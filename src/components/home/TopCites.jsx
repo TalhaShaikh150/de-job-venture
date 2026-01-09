@@ -1,34 +1,40 @@
 import React from "react";
+import { MoveRight } from "@/components/icons";
 
 const cities = [
   {
     name: "Berlin",
     jobs: "14,203",
-    image: "https://images.unsplash.com/photo-1566404791232-af9fe0ae8f8b?w=500&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1566404791232-af9fe0ae8f8b?w=500&auto=format&fit=crop&q=60",
     className: "col-span-1 md:col-span-2 md:row-span-2 h-64 md:h-auto", // Big Card responsive
   },
   {
     name: "Munich",
     jobs: "9,100",
-    image: "https://images.unsplash.com/photo-1595867818082-083862f3d630?w=500&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1595867818082-083862f3d630?w=500&auto=format&fit=crop&q=60",
     className: "col-span-1 h-64",
   },
   {
     name: "Hamburg",
     jobs: "6,400",
-    image: "https://images.unsplash.com/photo-1569150216991-aba1feb19ac5?w=500&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1569150216991-aba1feb19ac5?w=500&auto=format&fit=crop&q=60",
     className: "col-span-1 h-64",
   },
   {
     name: "Frankfurt",
     jobs: "5,200",
-    image: "https://images.unsplash.com/photo-1626447637943-4c9d412fa8cf?w=500&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1626447637943-4c9d412fa8cf?w=500&auto=format&fit=crop&q=60",
     className: "col-span-1 h-64",
   },
   {
     name: "Cologne",
     jobs: "3,800",
-    image: "https://images.unsplash.com/photo-1561624485-0e43bcc1836d?w=500&auto=format&fit=crop&q=60",
+    image:
+      "https://images.unsplash.com/photo-1561624485-0e43bcc1836d?w=500&auto=format&fit=crop&q=60",
     className: "col-span-1 h-64",
   },
 ];
@@ -37,7 +43,6 @@ const TopCites = () => {
   return (
     <section className="py-16 md:py-24 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6">
-        
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-12 gap-6">
           <div className="max-w-xl">
@@ -52,16 +57,14 @@ const TopCites = () => {
               business hubs.
             </p>
           </div>
-          
+
           <a
             href="#"
             className="hidden md:flex items-center gap-2 text-gray-900 font-semibold hover:text-brand-green hover:gap-3 transition-all duration-300 group"
           >
             View all cities
             <span className="bg-white border border-gray-200 group-hover:bg-brand-green group-hover:border-brand-green group-hover:text-white p-2 rounded-full transition-colors shadow-sm">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+              <MoveRight className="w-5 h-5" />
             </span>
           </a>
         </div>
@@ -94,11 +97,11 @@ const TopCites = () => {
                     {city.jobs} Open positions
                   </p>
                 </div>
-                
+
                 {/* Hover Reveal Button (Desktop only effect) */}
                 <div className="h-0 opacity-0 group-hover:h-auto group-hover:opacity-100 group-hover:mt-4 transition-all duration-500 overflow-hidden hidden md:block">
                   <span className="inline-flex items-center text-white text-sm font-semibold border-b border-brand-green pb-0.5">
-                    Browse Jobs &rarr;
+                    Browse Jobs <MoveRight className="w-4 h-4 ml-2" />
                   </span>
                 </div>
               </div>
@@ -119,7 +122,7 @@ const TopCites = () => {
             href="#"
             className="inline-flex items-center gap-2 text-brand-green font-bold text-sm bg-white px-6 py-3 rounded-full shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
           >
-            View all cities &rarr;
+            View all cities <MoveRight className="w-5 h-5" />
           </a>
         </div>
       </div>
