@@ -24,24 +24,22 @@ const SalaryEstimate = () => {
                 based on location, experience, and skill set.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-             
-<div className="relative">
-  <select className="appearance-none w-full px-5 py-3 pr-10 rounded bg-gray-800 text-white border border-gray-700 outline-none focus:border-brand-green cursor-pointer">
-    <option>Product Designer</option>
-    <option>Software Engineer</option>
-    <option>Marketing Manager</option>
-  </select>
-  
-  {/* Custom Icon Positioned Absolutely */}
-  <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-white">
-    <ChevronDown />
-  </div>
-</div>
+                <div className="relative">
+                  <select className="appearance-none w-full px-5 py-3 pr-10 rounded bg-gray-800 text-white border border-gray-700 outline-none focus:border-brand-green cursor-pointer">
+                    <option>Product Designer</option>
+                    <option>Software Engineer</option>
+                    <option>Marketing Manager</option>
+                  </select>
+
+                  {/* Custom Icon Positioned Absolutely */}
+                  <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-white">
+                    <ChevronDown />
+                  </div>
+                </div>
                 <button className="px-6 py-3 bg-brand-green text-white font-bold rounded hover:bg-lime-600 transition">
                   Check Salary
                 </button>
               </div>
-
             </div>
 
             {/* Graph Side (Visual Representation) */}

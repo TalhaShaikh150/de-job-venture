@@ -14,47 +14,48 @@ const logos = [
 
 const Recruiters = () => {
   return (
-    
-    <section className="py-16 bg-white overflow-hidden">
-      <div className="container mx-auto px-4 text-center mb-10">
-        <h3 className="text-gray-500 font-semibold uppercase tracking-widest text-sm">
+    <section className="py-10 md:py-16 bg-white overflow-hidden">
+      <div className="container mx-auto px-4 text-center mb-8 md:mb-10">
+        <h3 className="text-gray-400 font-semibold uppercase tracking-widest text-xs md:text-sm">
           Trusted by the world's best teams
         </h3>
       </div>
 
       <div className="relative w-full max-w-[1920px] mx-auto group">
         
-        {/* Gradient Fades for Smooth Edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-white to-transparent z-10"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-white to-transparent z-10"></div>
+        {/* Gradient Fades - Smaller on Mobile to show more logos */}
+        <div className="absolute left-0 top-0 bottom-0 w-12 md:w-24 lg:w-48 bg-gradient-to-r from-white to-transparent z-10"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-12 md:w-24 lg:w-48 bg-gradient-to-l from-white to-transparent z-10"></div>
 
         {/* Scrolling Container */}
-        <div className="flex w-max animate-scroll">
-          {/* First Set of Logos */}
-          <div className="flex items-center gap-16 mx-8">
+        <div className="flex w-max animate-scroll hover:pause-scroll">
+          
+          {/* First Set */}
+          <div className="flex items-center gap-8 md:gap-16 mx-4 md:mx-8">
             {logos.map((logo, index) => (
-              <div key={index} className="flex-shrink-0  transition-opacity duration-300  cursor-pointer">
+              <div key={index} className="flex-shrink-0 opacity-80 hover:opacity-100 transition-opacity duration-300 cursor-pointer">
                 <img 
                   src={logo.url} 
                   alt={logo.name} 
-                  className="h-8 md:h-10 w-auto object-contain"
+                  className="h-6 md:h-8 lg:h-10 w-auto object-contain"
                 />
               </div>
             ))}
           </div>
 
-          {/* Duplicate Set for Seamless Loop */}
-          <div className="flex items-center gap-16 mx-8">
+          {/* Duplicate Set for Loop */}
+          <div className="flex items-center gap-8 md:gap-16 mx-4 md:mx-8">
             {logos.map((logo, index) => (
-              <div key={`dup-${index}`} className="flex-shrink-0 transition-opacity duration-300 cursor-pointer">
+              <div key={`dup-${index}`} className="flex-shrink-0 opacity-80 hover:opacity-100 transition-opacity duration-300 cursor-pointer">
                 <img 
                   src={logo.url} 
                   alt={logo.name} 
-                  className="h-8 md:h-10 w-auto object-contain"
+                  className="h-6 md:h-8 lg:h-10 w-auto object-contain"
                 />
               </div>
             ))}
           </div>
+
         </div>
       </div>
     </section>

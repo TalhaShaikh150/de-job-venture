@@ -1,5 +1,5 @@
 import React from "react";
-import Searchbar from "../ui/Searchbar";
+import Searchbar from "@/components/ui/Searchbar";
 
 const JobHeader = () => {
   return (

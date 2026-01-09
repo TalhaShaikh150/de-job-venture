@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer";
-import JobHeader from "../components/joblistings/JobHeader";
-import FilterSection from "../components/joblistings/Filter";
-import JobCards from "../components/joblistings/JobCards";
-import { Filter } from "lucide-react";
-import Pagination from "../components/common/Pagination";
-import JobSorting from "../components/joblistings/JobSorting";
-
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import JobHeader from "@/components/joblistings/JobHeader";
+import FilterSection from "@/components/joblistings/Filter";
+import JobCards from "@/components/joblistings/JobCards";
+import Pagination from "@/components/common/Pagination";
+import JobSorting from "@/components/joblistings/Sorting";
+import { Funnel } from "@/components/icons";
 // --- DATA ---
 const JOBS = [
   {
@@ -97,14 +96,14 @@ const DejobListing = () => {
 
       <JobHeader />
       {/* --- MAIN CONTENT GRID --- */}
-      <div className="container mx-auto px-4 -mt-20 relative z-20 pb-20">
+      <div className="container mx-auto px-4 mt-5 relative z-20 pb-20">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* LEFT SIDEBAR (FILTERS) */}
           <aside className="lg:w-72 flex-shrink-0">
             <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 p-6 border border-slate-100 sticky top-24">
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                 <h2 className="font-bold text-lg text-slate-900 flex items-center gap-2">
-                  <Filter /> Filters
+                  <Funnel /> Filters
                 </h2>
                 <button className="text-xs font-semibold text-emerald-600 hover:underline">
                   Reset
