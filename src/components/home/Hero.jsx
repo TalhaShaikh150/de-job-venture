@@ -1,5 +1,5 @@
 import React from "react";
-import Searchbar from "../ui/Searchbar";
+import Searchbar from "@/components/ui/Searchbar";
 import { ChartNoAxesCombined, Building2 } from "@/components/icons";
 const Hero = () => {
   return (
@@ -21,7 +21,7 @@ const Hero = () => {
       {/* Background Overlay */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
-        <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-brand-dark to-transparent"></div>
+        {/* <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-brand-dark to-transparent"></div> */}
       </div>
 
       {/* Main Content */}

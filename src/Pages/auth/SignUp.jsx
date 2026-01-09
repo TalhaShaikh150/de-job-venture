@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpSchema } from "./signUpSchema";
+import { signUpSchema } from "@/Pages/auth/signUpSchema";
 
 function SignUp() {
   const {
