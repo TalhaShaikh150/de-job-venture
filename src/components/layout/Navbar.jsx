@@ -62,8 +62,8 @@ const Navbar = () => {
             <NavLink to="/about" className={desktopLinkClass}>
               About Us
             </NavLink>
-            <NavLink to="/salaries" className={desktopLinkClass}>
-              Salaries
+            <NavLink to="/contact" className={desktopLinkClass}>
+              Contact
             </NavLink>
           </div>
 
@@ -133,12 +133,10 @@ const Navbar = () => {
             <NavLink to="/about" className={mobileLinkClass}>
               About Us
             </NavLink>
-            <NavLink to="/salaries" className={mobileLinkClass}>
-              Salaries
+            <NavLink to="/contact" className={mobileLinkClass}>
+              Contact Us
             </NavLink>
-            <NavLink to="/career-advice" className={mobileLinkClass}>
-              Career Advice
-            </NavLink>
+          
 
             {/* Mobile Auth Actions */}
             <div className="mt-8 pt-8 border-t border-white/10 flex flex-col gap-4">
