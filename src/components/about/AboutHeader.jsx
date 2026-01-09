@@ -6,7 +6,7 @@ const AboutHeader = () => {
       <div class="bg-[#0f1624] pt-16 pb-48 relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
 
-        <div class="container mx-auto px-6 text-center relative z-10">
+        <div class="container mx-auto pax-6 text-center relative z-10">
           <span class="text-brand-green font-bold tracking-widest text-xs uppercase mb-4 block">
             Who We Are
           </span>

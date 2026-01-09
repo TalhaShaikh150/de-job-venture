@@ -8,7 +8,7 @@ import AboutUs from "@/Pages/AboutUs";
 import Login from "@/Pages/auth/Login";
 import SignUp from "@/Pages/auth/SignUp";
 import AuthLayout from "@/Pages/auth/AuthLayout";
-import Contact from "./Pages/Contact";
+import Contact from "@/Pages/Contact";
 
 function App() {
   return (

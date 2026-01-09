@@ -6,10 +6,11 @@ import {
   Phone, 
   ChevronDown, 
   Send, 
-  Briefcase 
-} from "lucide-react";
+  Briefcase,
+  ArrowRight
+} from "@/components/icons";
 
-// --- COMPONENTS ---
+// --- SUB-COMPONENTS ---
 
 const ContactCard = ({ icon, title, desc, link, action }) => (
   <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-lg hover:shadow-xl hover:border-brand-green/30 transition-all duration-300 group text-center flex flex-col items-center">
@@ -44,21 +45,122 @@ const FAQItem = ({ question, answer }) => {
   );
 };
 
-const Contact = () => {
+// --- SECTIONS ---
+
+const TeamSection = () => {
+  const team = [
+    { name: "Sarah Müller", role: "Head of Support", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" },
+    { name: "Felix Bauer", role: "Sales Director", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" },
+    { name: "Elena Weber", role: "Community Lead", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" },
+    { name: "Lukas Schmidt", role: "Tech Lead", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" },
+  ];
+
+  return (
+    <section className="py-24 bg-white">
+      <div className="container mx-auto px-4 text-center">
+        <h2 className="text-3xl font-bold text-brand-dark mb-4">Meet the team helping you succeed</h2>
+        <p className="text-slate-500 max-w-2xl mx-auto mb-16">Real people, based in Berlin, ready to answer your questions.</p>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {team.map((member, i) => (
+            <div key={i} className="group text-center">
+              <div className="relative w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-50 group-hover:border-brand-green transition-colors">
+                <img src={member.img} alt={member.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              </div>
+              <h4 className="text-lg font-bold text-slate-900">{member.name}</h4>
+              <p className="text-sm text-brand-green font-medium">{member.role}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const OfficeLocations = () => {
+  return (
+    <section className="py-24 bg-slate-50">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+           <div>
+              <span className="text-brand-green font-bold text-xs uppercase tracking-widest mb-2 block">Our Locations</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-brand-dark">Come visit us.</h2>
+           </div>
+           <p className="text-slate-500 max-w-md mt-4 md:mt-0 text-right">We have hubs in Germany's most vibrant cities.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+           {/* Berlin HQ */}
+           <div className="relative h-80 rounded-[2rem] overflow-hidden group shadow-lg">
+              <img src="https://images.unsplash.com/photo-1599946347371-68eb71b16afc?auto=format&fit=crop&w=800&q=80" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Berlin" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#161F33] via-transparent to-transparent opacity-90"></div>
+              <div className="absolute bottom-0 left-0 p-8">
+                 <h3 className="text-2xl font-bold text-white mb-1">Berlin HQ</h3>
+                 <p className="text-slate-300 text-sm mb-4">Friedrichstraße 123, 10117 Berlin</p>
+                 <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-bold rounded-lg border border-white/10">Open 9am - 6pm</span>
+              </div>
+           </div>
+
+           {/* Munich Hub */}
+           <div className="relative h-80 rounded-[2rem] overflow-hidden group shadow-lg">
+              <img src="https://images.unsplash.com/photo-1595867865312-9ac2d5344556?auto=format&fit=crop&w=800&q=80" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Munich" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#161F33] via-transparent to-transparent opacity-90"></div>
+              <div className="absolute bottom-0 left-0 p-8">
+                 <h3 className="text-2xl font-bold text-white mb-1">Munich Hub</h3>
+                 <p className="text-slate-300 text-sm mb-4">Leopoldstraße 56, 80802 München</p>
+                 <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-bold rounded-lg border border-white/10">Co-working Access</span>
+              </div>
+           </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const CommunityCTA = () => {
+  return (
+    <section className="py-20 px-4 bg-white">
+      <div className="container mx-auto bg-brand-dark rounded-[2.5rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl">
+         {/* Background Glow */}
+         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-brand-green/10 rounded-full blur-[120px] pointer-events-none"></div>
+         
+         <div className="relative z-10 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Join the Community</h2>
+            <p className="text-slate-400 mb-10 text-lg">
+               Not ready to contact us? Join our Discord server to chat with 50,000+ other professionals and recruiters in real-time.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+               <button className="px-8 py-4 bg-brand-green hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-brand-green/20 flex items-center justify-center gap-2">
+                  Join Discord <ArrowRight className="w-4 h-4" />
+               </button>
+               <button className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl border border-white/10 backdrop-blur-md transition-all">
+                  Read Documentation
+               </button>
+            </div>
+         </div>
+      </div>
+    </section>
+  );
+};
+
+// --- MAIN PAGE ---
+
+const ContactUs = () => {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-brand-green selection:text-white">
       <Navbar />
 
       {/* --- HERO SECTION --- */}
-      <section className="bg-[#161F33] pt-24 pb-32 relative overflow-hidden text-center">
+      <section className="bg-[#161F33] pt-32 pb-40 relative overflow-hidden text-center">
         {/* Abstract Background */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-brand-green/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 backdrop-blur-md text-emerald-400 text-xs font-bold uppercase tracking-wider mb-6">
             We're here to help
           </div>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight leading-tight">
             Get in touch with <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-green to-emerald-400">Dejob.</span>
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
@@ -67,8 +169,8 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* --- CARDS & FORM SECTION --- */}
-      <div className="container mx-auto px-4 -mt-20 relative z-20 pb-24">
+      {/* --- CONTACT GRID & FORM --- */}
+      <div className="container mx-auto px-4 -mt-24 relative z-20 pb-24">
         
         {/* Contact Options Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
@@ -96,7 +198,7 @@ const Contact = () => {
         </div>
 
         {/* Contact Form & Info Split */}
-        <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+        <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row mb-24">
           
           {/* Left: Form */}
           <div className="w-full lg:w-3/5 p-10 md:p-16">
@@ -180,9 +282,13 @@ const Contact = () => {
                 </div>
              </div>
           </div>
-
         </div>
       </div>
+
+      {/* --- ADDITIONAL SECTIONS --- */}
+      <OfficeLocations />
+      <TeamSection />
+      <CommunityCTA />
 
       {/* --- FAQ SECTION --- */}
       <section className="bg-white py-24 border-t border-slate-100">
@@ -229,4 +335,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactUs;
