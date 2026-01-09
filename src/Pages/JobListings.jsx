@@ -5,7 +5,7 @@ import JobHeader from "@/components/joblistings/JobHeader";
 import FilterSection from "@/components/joblistings/Filter";
 import JobCards from "@/components/joblistings/JobCards";
 import Pagination from "@/components/common/Pagination";
-import JobSorting from "@/components/joblistings/JobSorting";
+import JobSorting from "@/components/joblistings/Sorting";
 import { Funnel } from "@/components/icons";
 // --- DATA ---
 const JOBS = [
