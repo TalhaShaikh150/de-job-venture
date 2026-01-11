@@ -10,11 +10,11 @@ function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(signUpSchema),
+    mode: "onTouched",
   });
 
   function handleSignUp(data) {
     console.log(data);
-    console.log(errors);
   }
 
   return (
@@ -38,6 +38,11 @@ function SignUp() {
               placeholder="John"
               {...register("firstName")}
             />
+            {errors.firstName?.message && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.firstName.message}
+              </p>
+            )}
           </div>
           <div className="group">
             <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
@@ -49,6 +54,11 @@ function SignUp() {
               placeholder="Doe"
               {...register("lastName")}
             />
+            {errors.lastName?.message && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.lastName.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -62,6 +72,9 @@ function SignUp() {
             placeholder="name@company.com"
             {...register("email")}
           />
+          {errors.email?.message && (
+            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="group">
@@ -74,6 +87,11 @@ function SignUp() {
             placeholder="Create a password"
             {...register("password")}
           />
+          {errors.password?.message && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
         <button

@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod";
 
 export const signUpSchema = z.object({
   firstName: z
@@ -13,7 +13,7 @@ export const signUpSchema = z.object({
     .min(3, { message: "Last name should not be less than 3 characters" })
     .max(20, { message: "Last name should not be more than 20 characters" }),
 
-  email: z.string().email(),
+  email: z.string().email({ message: "Please provide a valid email address" }),
 
   password: z
     .string()
