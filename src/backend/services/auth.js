@@ -46,3 +46,15 @@ export async function signUserInDB({ email, password }) {
     throw err;
   }
 }
+
+export async function loginWithGoogle() {
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log("Error in google registration", err);
+  }
+}
