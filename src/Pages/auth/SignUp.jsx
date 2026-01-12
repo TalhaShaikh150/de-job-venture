@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "@/Pages/auth/signUpSchema";
-import { registerUserInDB } from "@/backend/services";
+import { loginWithGoogle, registerUserInDB } from "@/backend/services";
 import { useState } from "react";
 
 function SignUp() {
@@ -126,16 +126,19 @@ function SignUp() {
         >
           {isSubmitting ? "Creating account..." : "Create Account"}
         </button>
-
-        <button className="w-full py-4 bg-white border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            className="w-5 h-5"
-            alt="G"
-          />
-          Sign up with Google
-        </button>
       </form>
+
+      <button
+        className="w-full py-4 bg-white border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2 mt-2"
+        onClick={loginWithGoogle}
+      >
+        <img
+          src="https://www.svgrepo.com/show/475656/google-color.svg"
+          className="w-5 h-5"
+          alt="G"
+        />
+        Sign up with Google
+      </button>
 
       <div className="mt-10 text-center border-t border-slate-100 pt-6">
         <p className="text-slate-500">
