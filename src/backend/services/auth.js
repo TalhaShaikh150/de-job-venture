@@ -32,7 +32,7 @@ export async function registerUserInDB({
   }
 }
 
-export async function signUserInDB(email, password) {
+export async function signUserInDB({ email, password }) {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,

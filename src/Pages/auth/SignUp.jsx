@@ -32,8 +32,10 @@ function SignUp() {
         setFormMessage(
           "An account with this email already exists. Please log in."
         );
+        reset();
       } else {
         setFormMessage("Something went wrong. Please try again.");
+        reset();
       }
     }
   }
