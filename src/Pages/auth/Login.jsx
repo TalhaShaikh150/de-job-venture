@@ -1,53 +1,135 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "./loginSchema";
+import { signUserInDB } from "@/backend/services";
+import { useState } from "react";
 
 function Login() {
+  const [formMessage, setFormMessage] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    mode: "onTouched",
+  });
+
+  async function handleLogin(formData) {
+    try {
+      setFormMessage("");
+
+      const data = await signUserInDB(formData);
+
+      reset();
+
+      setFormMessage("Login Successfull");
+      // Redirect to the desired URL
+    } catch (err) {
+      const isBadCreds =
+        err?.message?.toLowerCase().includes("invalid") || err?.status === 400;
+      setFormMessage(
+        isBadCreds
+          ? "Invalid email or password"
+          : "Something went wrong. Please try again."
+      );
+
+      reset();
+    }
+  }
+
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-10">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-2">Welcome back!</h1>
-        <p className="text-slate-500">Enter your credentials to access your account.</p>
+        <h1 className="text-4xl font-extrabold text-slate-900 mb-2">
+          Welcome back!
+        </h1>
+        <p className="text-slate-500">
+          Enter your credentials to access your account.
+        </p>
       </div>
 
-      <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+      <form className="space-y-5" onSubmit={handleSubmit(handleLogin)}>
         <div className="group">
-          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Email Address</label>
-          <input 
-            type="email" 
+          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
+            Email Address
+          </label>
+          <input
+            type="email"
             className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300"
             placeholder="name@company.com"
+            {...register("email")}
           />
+
+          {errors.email?.message && (
+            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+          )}
         </div>
         <div className="group">
-          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Password</label>
-          <input 
-            type="password" 
+          <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
+            Password
+          </label>
+          <input
+            type="password"
             className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300"
             placeholder="Enter your password"
+            {...register("password")}
           />
+          {errors.password?.message && (
+            <p className="mt-1 text-sm text-red-500">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
         <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-brand-dark focus:ring-brand-dark" />
-              <span className="text-sm text-slate-600">Remember me</span>
-            </label>
-            <Link to="/auth/forgot-password" className="text-sm font-bold text-brand-green hover:underline">Recover password</Link>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              className="w-4 h-4 rounded border-slate-300 text-brand-dark focus:ring-brand-dark"
+            />
+            <span className="text-sm text-slate-600">Remember me</span>
+          </label>
+          <Link
+            to="/auth/forgot-password"
+            className="text-sm font-bold text-brand-green hover:underline"
+          >
+            Recover password
+          </Link>
         </div>
 
-        <button className="w-full py-4 bg-brand-dark hover:bg-brand-green text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all">
-          Sign In
+        {formMessage && (
+          <p className="text-sm text-red-600 text-center">{formMessage}</p>
+        )}
+
+        <button
+          className="w-full py-4 bg-brand-dark hover:bg-brand-green text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Signing In..." : "Sign In"}
         </button>
 
         <button className="w-full py-4 bg-white border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="G" />
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            className="w-5 h-5"
+            alt="G"
+          />
           Sign in with Google
         </button>
       </form>
 
       <div className="mt-10 text-center border-t border-slate-100 pt-6">
         <p className="text-slate-500">
-          Don't have an account? <Link to="/signup" className="text-brand-dark font-bold hover:underline">Sign up</Link>
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-brand-dark font-bold hover:underline"
+          >
+            Sign up
+          </Link>
         </p>
       </div>
     </div>
