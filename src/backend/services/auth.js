@@ -31,3 +31,18 @@ export async function registerUserInDB({
     throw err;
   }
 }
+
+export async function signUserInDB(email, password) {
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error("signUserInDB error:", err);
+    throw err;
+  }
+}
