@@ -130,6 +130,7 @@ function SignUp() {
 
       <button
         className="w-full py-4 bg-white border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2 mt-2"
+        type="button"
         onClick={loginWithGoogle}
       >
         <img
