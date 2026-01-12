@@ -2,19 +2,40 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "@/Pages/auth/signUpSchema";
+import { registerUserInDB } from "@/backend/services";
+import { useState } from "react";
 
 function SignUp() {
+  const [formMessage, setFormMessage] = useState("");
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm({
     resolver: zodResolver(signUpSchema),
     mode: "onTouched",
   });
 
-  function handleSignUp(data) {
-    console.log(data);
+  async function handleSignUp(formData) {
+    try {
+      setFormMessage("");
+
+      const data = await registerUserInDB(formData);
+
+      reset();
+
+      setFormMessage("Account created. Check your email to confirm.");
+    } catch (error) {
+      if (error.message.includes("already")) {
+        setFormMessage(
+          "An account with this email already exists. Please log in."
+        );
+      } else {
+        setFormMessage("Something went wrong. Please try again.");
+      }
+    }
   }
 
   return (
@@ -94,11 +115,14 @@ function SignUp() {
           )}
         </div>
 
+        {formMessage && (
+          <p className="text-sm text-red-600 text-center">{formMessage}</p>
+        )}
         <button
           className="w-full py-4 bg-brand-dark hover:bg-brand-green text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all"
           disabled={isSubmitting}
         >
-          Create Account
+          {isSubmitting ? "Creating account..." : "Create Account"}
         </button>
 
         <button className="w-full py-4 bg-white border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
