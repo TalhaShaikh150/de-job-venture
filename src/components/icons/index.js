@@ -24,6 +24,8 @@ export {
   Clock,
   Bookmark,
   Funnel, // Whole Job Listing Page Icons
+  Globe,
+  MessageSquare,// Whole Contact Page Icons
   Mail,
   Phone,
   Send,

@@ -1,7 +1,7 @@
 import React from "react";
 import { Quote, Star } from "@/components/icons";
 
-const SucessStories = () => {
+const SuccessStories = () => {
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-4">
@@ -90,4 +90,4 @@ const SucessStories = () => {
   );
 };
 
-export default SucessStories;
+export default SuccessStories;

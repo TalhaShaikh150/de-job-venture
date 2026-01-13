@@ -36,30 +36,57 @@ const steps = [
 
 const HowWeWork = () => {
   return (
-    <section className="py-24 bg-slate-50">
-      <div className="container mx-auto px-4">
+    <section className="py-24 bg-slate-50 font-sans relative overflow-hidden">
+      {/* Optional Background Decoration */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+
+      <div className="container mx-auto px-4 relative z-10">
         
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="text-brand-green font-bold text-xs uppercase tracking-widest mb-2 block">Process</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900">How We Work</h2>
-          <p className="text-slate-500 mt-4">
-            We make the entire hiring process smooth, safe, and stress-free.
+        {/* Header */}
+        <div className="text-center max-w-2xl mx-auto mb-20">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-brand-dark text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-brand-green animate-pulse"></span>
+            Process
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-brand-dark tracking-tight">
+            How We Work
+          </h2>
+          <p className="text-slate-500 mt-6 text-lg leading-relaxed">
+            We make the entire hiring process smooth, safe, and stress-free for your journey to Germany.
           </p>
         </div>
 
+        {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {steps.map((step) => (
-            <div key={step.id} className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-12 h-12 bg-slate-900 text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">
-                  {step.id}
+            <div 
+              key={step.id} 
+              className="group relative bg-white p-8 md:p-10 rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl hover:shadow-brand-dark/10 hover:border-brand-green/50 transition-all duration-500 ease-out hover:-translate-y-2"
+            >
+              
+              {/* Header Row: Icon & ID */}
+              <div className="flex justify-between items-start mb-8">
+                {/* Icon Box */}
+                <div className="w-16 h-16 rounded-2xl bg-brand-dark flex items-center justify-center shadow-lg group-hover:bg-brand-green transition-colors duration-500">
+                  <step.icon className="w-7 h-7 text-white transition-transform duration-500 group-hover:scale-110" />
                 </div>
-                <step.icon className="w-6 h-6 text-brand-green" />
+
+                {/* Roman Numeral Badge */}
+                <span className="text-3xl font-bold text-slate-100 group-hover:text-brand-dark/5 transition-colors duration-500 select-none font-serif italic">
+                  {step.id}
+                </span>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">{step.title}</h3>
-              <p className="text-slate-500 leading-relaxed text-sm">
+
+              {/* Content */}
+              <h3 className="text-2xl font-bold text-brand-dark mb-4 group-hover:text-brand-green transition-colors duration-300">
+                {step.title}
+              </h3>
+              <p className="text-slate-500 leading-relaxed text-base">
                 {step.desc}
               </p>
+
+              {/* Bottom Decorative Line */}
+              <div className="absolute bottom-8 left-10 right-10 h-px bg-slate-100 group-hover:bg-brand-green/20 transition-colors duration-500"></div>
             </div>
           ))}
         </div>

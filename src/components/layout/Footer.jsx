@@ -1,7 +1,7 @@
 import React from "react";
-import {Facebook,Instagram,Linkedin}from "@/components/icons"
+import { Facebook, Instagram, Linkedin } from "@/components/icons";
 
- const Footer = () => {
+const Footer = () => {
   return (
     <>
       <footer className="bg-[#0f1624] text-gray-400 py-16 border-t border-gray-800">
@@ -19,15 +19,13 @@ import {Facebook,Instagram,Linkedin}from "@/components/icons"
               </p>
               <div className="flex gap-4">
                 <a href="#" className="hover:text-white transition">
-                <Facebook className="w-5 h-5"/>
+                  <Facebook className="w-5 h-5" />
                 </a>
                 <a href="#" className="hover:text-white transition">
-                <Instagram className="w-5 h-5"/>
-               
+                  <Instagram className="w-5 h-5" />
                 </a>
                 <a href="#" className="hover:text-white transition">
-                  
-                <Linkedin className="w-5 h-5"/>
+                  <Linkedin className="w-5 h-5" />
                 </a>
               </div>
             </div>
@@ -101,7 +99,10 @@ import {Facebook,Instagram,Linkedin}from "@/components/icons"
           </div>
 
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
-            <p>&copy; 2023 Dejob Job Board. All rights reserved.</p>
+            <p>
+              &copy; {new Date().getFullYear()} Dejob Job Board. All rights
+              reserved.
+            </p>{" "}
             <div className="flex gap-4 mt-4 md:mt-0">
               <a href="#" className="hover:text-white">
                 Privacy Policy
@@ -119,4 +120,4 @@ import {Facebook,Instagram,Linkedin}from "@/components/icons"
     </>
   );
 };
-export default Footer
+export default Footer;
