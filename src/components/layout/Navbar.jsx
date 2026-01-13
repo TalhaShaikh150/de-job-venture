@@ -1,167 +1,177 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
+import { Menu, X, ArrowRight, User } from "lucide-react";
+import LogoImage from "@/assets/images/logo.webp";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
-  // Close menu when route changes
+  // Scroll Detection
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close Mobile Menu on Route Change
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
 
-  // Lock body scroll when menu is open to prevent background scrolling
+  // Lock Body Scroll
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
+    document.body.style.overflow = isOpen ? "hidden" : "unset";
   }, [isOpen]);
 
-  // Desktop Link Style
-  const desktopLinkClass = ({ isActive }) =>
-    `h-full flex items-center px-2 text-sm font-medium border-b-2 transition-all duration-300 ${
+  // Desktop Link Styles
+  // ADDED: 'whitespace-nowrap' to prevent line breaking
+  const navLinkClass = ({ isActive }) =>
+    `px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap ${
       isActive
-        ? "border-brand-green text-white drop-shadow-[0_0_8px_rgba(107,197,81,0.5)]"
-        : "border-transparent text-gray-400 hover:text-white hover:border-white/20"
+        ? "bg-white text-brand-dark shadow-md font-bold transform scale-105"
+        : "text-slate-400 hover:text-white hover:bg-white/5"
     }`;
 
-  // Mobile Link Style
+  // Mobile Link Styles
   const mobileLinkClass = ({ isActive }) =>
-    `text-3xl font-bold transition-all duration-300 transform ${
-      isActive
-        ? "text-brand-green translate-x-4"
-        : "text-gray-400 hover:text-white hover:translate-x-2"
+    `text-4xl font-extrabold tracking-tight transition-all duration-300 ${
+      isActive ? "text-brand-green" : "text-white hover:text-slate-300"
     }`;
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-[#161F33] backdrop-blur-sm">
-        {/* --- HEADER CONTENT (ALWAYS ON TOP) --- */}
-        <div className="container mx-auto px-6 h-20 flex justify-between items-center relative z-50 bg-[#161F33]/0">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="text-2xl font-bold text-white tracking-wide flex items-center gap-2"
-          >
-            DEJOB<span className="text-brand-green">.</span>
-          </Link>
-
-          {/* Desktop Links (Hidden on Mobile) */}
-          <div className="hidden md:flex gap-10 h-full">
-            <NavLink to="/" className={desktopLinkClass}>
-              Home
-            </NavLink>
-            <NavLink to="/listing" className={desktopLinkClass}>
-              Find Jobs
-            </NavLink>
-            <NavLink to="/about" className={desktopLinkClass}>
-              About Us
-            </NavLink>
-            <NavLink to="/contact" className={desktopLinkClass}>
-              Contact
-            </NavLink>
+      <header className="fixed top-0 left-0 w-full z-50 flex justify-center pt-6 px-4 pointer-events-none">
+        
+        {/* === FLOATING NAV CONTAINER === */}
+        <nav
+          className={`
+            pointer-events-auto
+            grid grid-cols-3 items-center 
+            bg-[#161F33]/90 backdrop-blur-2xl border border-white/10 shadow-2xl
+            transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]
+            ${
+              isScrolled
+                ? "w-full max-w-[1200px] rounded-full px-5 py-3 shadow-brand-dark/50" // Made wider (1200px)
+                : "w-full max-w-[1500px] rounded-2xl px-8 py-5"
+            }
+          `}
+        >
+          {/* --- 1. LEFT: PROMINENT LOGO --- */}
+          <div className="flex justify-start min-w-0"> {/* min-w-0 prevents flex items from overflowing */}
+            <Link to="/" className="group relative z-10 block">
+              {/* White Container for Contrast + Glow */}
+              <div 
+                className={`
+                  bg-white rounded-xl flex items-center justify-center 
+                  transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)] 
+                  group-hover:shadow-[0_0_25px_rgba(107,197,81,0.4)] group-hover:scale-105
+                  ${isScrolled ? 'h-10 px-4' : 'h-14 px-6'}
+                `}
+              >
+                <img
+                  src={LogoImage}
+                  alt="Dejob"
+                  className="h-full w-auto object-contain"
+                />
+              </div>
+            </Link>
           </div>
 
-          {/* Desktop Auth (Hidden on Mobile) */}
-          <div className="hidden md:flex gap-6 items-center">
+          {/* --- 2. CENTER: SYMMETRICAL NAVIGATION --- */}
+          {/* Using flex-shrink-0 to ensure this section refuses to shrink below its content size */}
+          <div className="hidden md:flex justify-center shrink-0">
+            <div className={`
+              flex items-center gap-1 bg-black/20 rounded-full border border-white/5 backdrop-blur-md transition-all duration-300
+              ${isScrolled ? 'p-1' : 'p-1.5'}
+            `}>
+              <NavLink to="/" className={navLinkClass}>
+                Home
+              </NavLink>
+              <NavLink to="/listing" className={navLinkClass}>
+                Find Jobs
+              </NavLink>
+              <NavLink to="/about" className={navLinkClass}>
+                About
+              </NavLink>
+              <NavLink to="/contact" className={navLinkClass}>
+                Contact
+              </NavLink>
+            </div>
+          </div>
+
+          {/* --- 3. RIGHT: AUTH ACTIONS --- */}
+          <div className="hidden md:flex justify-end items-center gap-3 lg:gap-4 min-w-0">
             <Link
               to="/login"
-              className="text-sm font-semibold text-gray-300 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-sm font-bold text-slate-300 hover:text-white transition-colors whitespace-nowrap"
             >
+              <User className="w-4 h-4" />
               Sign In
             </Link>
             <Link
               to="/signup"
-              className="bg-brand-green hover:bg-emerald-600 text-white text-xs font-bold px-6 py-3 rounded-full shadow-lg shadow-brand-green/20 hover:shadow-brand-green/40 hover:-translate-y-0.5 transition-all"
+              className={`
+                bg-brand-green text-brand-dark hover:bg-white hover:text-brand-dark 
+                text-sm font-bold rounded-full transition-all duration-300 
+                flex items-center gap-2 shadow-lg shadow-brand-green/20 whitespace-nowrap
+                ${isScrolled ? 'px-5 py-2.5' : 'px-8 py-3.5'}
+              `}
             >
-              Register
+              Get Started <ArrowRight className="w-4 h-4 hidden lg:block" />
             </Link>
           </div>
 
-          {/* Hamburger Button (Visible on Mobile) */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white focus:outline-none w-8 h-8 flex items-center justify-center"
-            aria-label="Toggle Menu"
-          >
-            <div className="flex flex-col justify-between w-6 h-5 relative">
-              <span
-                className={`h-[2px] w-full bg-white rounded transition-all duration-300 ${
-                  isOpen ? "rotate-45 translate-y-2.5" : ""
-                }`}
-              ></span>
-              <span
-                className={`h-[2px] w-full bg-white rounded transition-all duration-300 ${
-                  isOpen ? "opacity-0" : "opacity-100"
-                }`}
-              ></span>
-              <span
-                className={`h-[2px] w-full bg-white rounded transition-all duration-300 ${
-                  isOpen ? "-rotate-45 -translate-y-2" : ""
-                }`}
-              ></span>
-            </div>
-          </button>
+          {/* MOBILE TOGGLE (Hidden on Desktop) */}
+          <div className="md:hidden flex justify-end col-span-2">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="bg-white/10 text-white p-3 rounded-full hover:bg-white/20 transition-colors border border-white/5"
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* --- MOBILE MENU OVERLAY --- */}
+      <div
+        className={`fixed inset-0 z-40 bg-[#161F33] transition-all duration-500 md:hidden flex flex-col justify-between px-8 pb-12 pt-36 ${
+          isOpen
+            ? "opacity-100 visible translate-y-0"
+            : "opacity-0 invisible -translate-y-10 pointer-events-none"
+        }`}
+      >
+        {/* Background Effects */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-green/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        {/* Links */}
+        <div className="flex flex-col gap-8 relative z-10">
+          <NavLink to="/" className={mobileLinkClass}>Home</NavLink>
+          <NavLink to="/listing" className={mobileLinkClass}>Find Jobs</NavLink>
+          <NavLink to="/about" className={mobileLinkClass}>About Us</NavLink>
+          <NavLink to="/contact" className={mobileLinkClass}>Contact</NavLink>
         </div>
 
-        {/* --- MOBILE FULL SCREEN OVERLAY --- */}
-        <div
-          className={`fixed inset-0 bg-[#161F33] z-40 flex flex-col justify-center px-8 transition-all duration-500 ease-in-out md:hidden ${
-            isOpen
-              ? "opacity-100 visible translate-y-0"
-              : "opacity-0 invisible -translate-y-10"
-          }`}
-          style={{ height: "100vh", width: "100vw" }} // Force full viewport coverage
-        >
-          {/* Background Decorative Blobs */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-green/10 rounded-full blur-[100px] pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-          {/* Menu Items Container - Added pt-20 to push content down below header */}
-          <div className="flex flex-col gap-6 relative z-10 w-full max-w-sm mx-auto pt-20">
-            <NavLink to="/" className={mobileLinkClass}>
-              Home
-            </NavLink>
-            <NavLink to="/listing" className={mobileLinkClass}>
-              Find Jobs
-            </NavLink>
-            <NavLink to="/about" className={mobileLinkClass}>
-              About Us
-            </NavLink>
-            <NavLink to="/contact" className={mobileLinkClass}>
-              Contact Us
-            </NavLink>
-          
-
-            {/* Mobile Auth Actions */}
-            <div className="mt-8 pt-8 border-t border-white/10 flex flex-col gap-4">
-              <Link
-                to="/post-job"
-                className="w-full py-4 bg-brand-green text-white text-center font-bold text-lg rounded-xl shadow-lg shadow-brand-green/20 active:scale-95 transition-transform"
-              >
-                Post a Job
-              </Link>
-              <div className="flex items-center justify-center gap-2 mt-2">
-                <span className="text-gray-500 text-sm">Have an account?</span>
-                <Link
-                  to="/login"
-                  className="text-white font-bold text-sm underline decoration-brand-green decoration-2 underline-offset-4"
-                >
-                  Sign In
-                </Link>
-              </div>
-            </div>
+        {/* Mobile Footer */}
+        <div className="space-y-4">
+          <Link
+            to="/signup"
+            className="w-full flex justify-center items-center gap-2 bg-brand-green text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand-green/20 text-lg"
+          >
+            Create Account
+          </Link>
+          <div className="flex items-center justify-center gap-2 text-slate-400">
+            <span>Already have an account?</span>
+            <Link to="/login" className="text-white font-bold underline decoration-brand-green underline-offset-4">
+              Log In
+            </Link>
           </div>
         </div>
-      </nav>
-
-      {/* Spacer to prevent content from hiding behind fixed navbar */}
-      <div className="h-20" />
+      </div>
     </>
   );
 };
