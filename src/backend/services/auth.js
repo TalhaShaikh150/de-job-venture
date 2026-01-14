@@ -1,4 +1,4 @@
-import { supabase } from "../config";
+import { supabase } from "@/backend/config";
 
 export async function registerUserInDB({
   firstName,
