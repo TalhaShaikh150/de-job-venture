@@ -20,12 +20,19 @@ export {
   UserCheck,
   FileCheck,
   Smile,
+  TrendingUp,
+  CheckCircle2,
+  Zap,
+  Menu,
+  Twitter,
+  User,
+  X,
   Star, // Whole Home Page Icons
   Clock,
   Bookmark,
   Funnel, // Whole Job Listing Page Icons
   Globe,
-  MessageSquare,// Whole Contact Page Icons
+  MessageSquare, // Whole Contact Page Icons
   Mail,
   Phone,
   Send,

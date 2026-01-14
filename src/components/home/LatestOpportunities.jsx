@@ -1,145 +1,100 @@
 import React from "react";
-import {
-  MoveRight,
-  Palette,
-  Code,
-  ChartNoAxesColumnIncreasing,
-} from "@/components/icons";
+import { MoveRight, Code, Palette, TrendingUp, Clock, MapPin, Briefcase } from "@/components/icons";
+import { Link } from "react-router-dom";
+
+const jobs = [
+  { 
+    id: 1, 
+    title: "Senior Product Designer", 
+    company: "Zalando", 
+    time: "2h ago", 
+    salary: "€85k - €110k",
+    type: "Full Time",
+    icon: Palette 
+  },
+  { 
+    id: 2, 
+    title: "Frontend Developer", 
+    company: "N26 Bank", 
+    time: "5h ago", 
+    salary: "€75k - €95k",
+    type: "Remote",
+    icon: Code 
+  },
+  { 
+    id: 3, 
+    title: "Growth Marketing Lead", 
+    company: "Delivery Hero", 
+    time: "1d ago", 
+    salary: "€65k - €85k",
+    type: "Hybrid",
+    icon: TrendingUp 
+  },
+];
+
 const LatestOpportunities = () => {
   return (
-    <>
-      {/* ==================== LATEST JOBS SECTION ==================== */}
-
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900">
-                Latest Opportunities
-              </h2>
-              <p className="text-gray-400 mt-2">Fresh jobs added today</p>
-            </div>
-            <a
-              href="#"
-              className="hidden md:flex items-center gap-2 text-gray-900 font-semibold hover:text-brand-green hover:gap-3 transition-all duration-300 group"
-            >
-              View all jobs
-              <span className="bg-white border border-gray-200 group-hover:bg-brand-green group-hover:border-brand-green group-hover:text-white p-2 rounded-full transition-colors shadow-sm">
-                <MoveRight className="w-5 h-5" />
-              </span>
-            </a>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {/* Job Row 1 */}
-            <div className="bg-white p-6 rounded-xl border border-gray-100 hover:border-brand-green/30 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row items-start md:items-center gap-6 group">
-              <div className="bg-orange-50 w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Palette className="w-8 h-8 text-orange-500" />
-              </div>
-
-              <div className="flex-grow">
-                <div className="flex flex-wrap items-center gap-3 mb-1">
-                  <h3 className="font-bold text-lg text-gray-900 group-hover:text-orange-500 transition-colors">
-                    Product Designer
-                  </h3>
-                  <span className="bg-green-100 text-brand-green text-[10px] font-bold px-2 py-0.5 rounded-full">
-                    FULL TIME
-                  </span>
-                </div>
-                <p className="text-sm text-gray-500 mb-2">
-                  Zalando • Berlin, DE
-                </p>
-                <div className="flex gap-2">
-                  <span className="px-2 py-1 bg-gray-50 text-gray-500 text-[10px] font-medium rounded border border-gray-100">
-                    UI/UX
-                  </span>
-                  <span className="px-2 py-1 bg-gray-50 text-gray-500 text-[10px] font-medium rounded border border-gray-100">
-                    Figma
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex flex-row md:flex-col items-center md:items-end gap-4 w-full md:w-auto justify-between">
-                <span className="font-bold text-gray-900 text-lg">$120k</span>
-                <button className="bg-gray-900 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-brand-green transition-colors w-full md:w-auto">
-                  Apply Now
-                </button>
-              </div>
-            </div>
-
-            {/* Job Row 2 */}
-            <div className="bg-white p-6 rounded-xl border border-gray-100 hover:border-brand-green/30 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row items-start md:items-center gap-6 group">
-              <div className="bg-blue-50 w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Code className="w-8 h-8 text-blue-500" />
-              </div>
-
-              <div className="flex-grow">
-                <div className="flex flex-wrap items-center gap-3 mb-1">
-                  <h3 className="font-bold text-lg text-gray-900 group-hover:text-blue-500 transition-colors">
-                    Frontend Developer
-                  </h3>
-                  <span className="bg-blue-100 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                    REMOTE
-                  </span>
-                </div>
-                <p className="text-sm text-gray-500 mb-2">N26 • Berlin, DE</p>
-                <div className="flex gap-2">
-                  <span className="px-2 py-1 bg-gray-50 text-gray-500 text-[10px] font-medium rounded border border-gray-100">
-                    React
-                  </span>
-                  <span className="px-2 py-1 bg-gray-50 text-gray-500 text-[10px] font-medium rounded border border-gray-100">
-                    Tailwind
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex flex-row md:flex-col items-center md:items-end gap-4 w-full md:w-auto justify-between">
-                <span className="font-bold text-gray-900 text-lg">$90k</span>
-                <button className="bg-gray-900 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-500 transition-colors w-full md:w-auto">
-                  Apply Now
-                </button>
-              </div>
-            </div>
-
-            {/* Job Row 3 */}
-            <div className="bg-white p-6 rounded-xl border border-gray-100 hover:border-brand-green/30 hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row items-start md:items-center gap-6 group">
-              <div className="bg-red-50 w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0">
-                <ChartNoAxesColumnIncreasing className="w-8 h-8 text-red-500" />
-              </div>
-
-              <div className="flex-grow">
-                <div className="flex flex-wrap items-center gap-3 mb-1">
-                  <h3 className="font-bold text-lg text-gray-900 group-hover:text-red-500 transition-colors">
-                    Marketing Manager
-                  </h3>
-                  <span className="bg-purple-100 text-purple-600 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                    PART TIME
-                  </span>
-                </div>
-                <p className="text-sm text-gray-500 mb-2">
-                  Delivery Hero • Munich, DE
-                </p>
-                <div className="flex gap-2">
-                  <span className="px-2 py-1 bg-gray-50 text-gray-500 text-[10px] font-medium rounded border border-gray-100">
-                    SEO
-                  </span>
-                  <span className="px-2 py-1 bg-gray-50 text-gray-500 text-[10px] font-medium rounded border border-gray-100">
-                    Growth
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex flex-row md:flex-col items-center md:items-end gap-4 w-full md:w-auto justify-between">
-                <span className="font-bold text-gray-900 text-lg">$65k</span>
-                <button className="bg-gray-900 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-red-500 transition-colors w-full md:w-auto">
-                  Apply Now
-                </button>
-              </div>
-            </div>
-          </div>
+    <section className="py-24 bg-white font-sans">
+      <div className="container mx-auto px-4 max-w-6xl">
+        
+        {/* Header */}
+        <div className="flex justify-between items-end mb-10 pb-6 border-b border-slate-100">
+           <div>
+              <span className="text-brand-green font-bold text-xs uppercase tracking-widest mb-2 block">Featured</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-brand-dark">Latest Opportunities</h2>
+           </div>
+           <Link to="/listing" className="hidden md:flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-dark transition-colors">
+              View all <MoveRight className="w-4 h-4"/>
+           </Link>
         </div>
-      </section>
-    </>
+
+        {/* Job List */}
+        <div className="flex flex-col gap-4">
+          {jobs.map((job) => (
+            <div key={job.id} className="group bg-[#161F33] rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 hover:shadow-2xl hover:shadow-brand-dark/20 transition-all duration-300 transform hover:-translate-y-1">
+               
+               {/* Icon Area */}
+               <div className="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center text-brand-green shrink-0 border border-white/5">
+                  <job.icon className="w-7 h-7" />
+               </div>
+
+               {/* Main Info */}
+               <div className="flex-1 text-center md:text-left w-full">
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-brand-green transition-colors">
+                     {job.title}
+                  </h3>
+                  
+                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-slate-400 font-medium">
+                     <span className="flex items-center gap-1.5"><Briefcase className="w-3.5 h-3.5"/> {job.company}</span>
+                     <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5"/> {job.type}</span>
+                     <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5"/> {job.time}</span>
+                  </div>
+               </div>
+
+               {/* Right Side: Salary & Button */}
+               <div className="flex flex-col md:items-end w-full md:w-auto gap-4  pt-4 md:pt-0 border-t md:border-t-0 border-white/10">
+                  <span className="block text-center md:text-right font-bold text-white text-lg">
+                     {job.salary}
+                  </span>
+                  
+                  <button className="w-full md:w-auto bg-brand-green hover:bg-white text-brand-dark font-bold px-6 py-2.5 rounded-lg transition-all flex items-center justify-center gap-2">
+                     Apply Now <MoveRight className="w-4 h-4"/>
+                  </button>
+               </div>
+
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile View All Link */}
+        <div className="mt-8 text-center md:hidden">
+           <Link to="/listing" className="text-brand-dark font-bold border-b-2 border-brand-green pb-1">
+              View All Jobs
+           </Link>
+        </div>
+
+      </div>
+    </section>
   );
 };
 

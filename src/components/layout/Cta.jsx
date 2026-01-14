@@ -1,7 +1,7 @@
 import React from "react";
 import { Sparkles, ArrowRight } from "lucide-react";
 
-const CTAProfile = () => {
+const CTA = () => {
   return (
     <section className="py-28 bg-brand-dark font-sans relative overflow-hidden">
       
@@ -36,10 +36,10 @@ const CTAProfile = () => {
         {/* Action Area */}
         <div className="flex flex-col items-center">
           <a
-            href="/profile"
+            href="/signup"
             className="group flex items-center gap-3 px-10 py-5 text-lg font-bold text-brand-dark bg-brand-green rounded-xl hover:bg-white transition-all duration-300 transform hover:-translate-y-1"
           >
-            Update Profile Now
+            Register Now
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </a>
           
@@ -57,4 +57,4 @@ const CTAProfile = () => {
     </section>
   );
 };
-export default CTAProfile;
+export default CTA;

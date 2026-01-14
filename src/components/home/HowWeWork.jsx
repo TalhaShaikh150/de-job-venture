@@ -1,96 +1,101 @@
 import React from "react";
-import { UserCheck, Search, FileCheck, Briefcase, Smile } from "@/components/icons";
+import {
+  UserCheck,
+  Search,
+  FileCheck,
+  Briefcase,
+  Smile,
+  ArrowRight,
+} from "@/components/icons";
 
 const steps = [
-  { 
-    id: "I", 
-    title: "Understanding Your Profile", 
-    desc: "We analyze your skills, education, and preferences to find the perfect match.", 
-    icon: UserCheck 
+  {
+    id: "01",
+    title: "Profile Analysis",
+    desc: "We analyze skills & education to find your match.",
+    icon: UserCheck,
   },
-  { 
-    id: "II", 
-    title: "Smart Shortlisting", 
-    desc: "Our team connects you with genuine openings from our verified database.", 
-    icon: Search 
+  {
+    id: "02",
+    title: "Smart Shortlisting",
+    desc: "Connect with genuine openings in our database.",
+    icon: Search,
   },
-  { 
-    id: "III", 
-    title: "Easy Onboarding", 
-    desc: "We guide you through paperwork and documentation for a smooth start.", 
-    icon: FileCheck 
+  {
+    id: "03",
+    title: "Easy Onboarding",
+    desc: "Guidance through paperwork and documentation.",
+    icon: FileCheck,
   },
-  { 
-    id: "IV", 
-    title: "Ongoing Management", 
-    desc: "We handle contracts, salary, and procedures so you can focus on work.", 
-    icon: Briefcase 
+  {
+    id: "04",
+    title: "Ongoing Support",
+    desc: "We handle contracts so you can focus on work.",
+    icon: Briefcase,
   },
-  { 
-    id: "V", 
-    title: "Stress-Free Experience", 
-    desc: "A transparent, supportive path to your professional growth in Germany.", 
-    icon: Smile 
+  {
+    id: "05",
+    title: "Growth",
+    desc: "A supportive path to your professional career.",
+    icon: Smile,
   },
 ];
 
-const HowWeWork = () => {
+const HowWeWork= () => {
   return (
-    <section className="py-24 bg-slate-50 font-sans relative overflow-hidden">
-      {/* Optional Background Decoration */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-
-      <div className="container mx-auto px-4 relative z-10">
-        
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-brand-dark text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-brand-green animate-pulse"></span>
-            Process
+    <section className="py-20 lg:py-28 bg-slate-50 font-sans">
+      <div className="container mx-auto px-6">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div className="max-w-2xl">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-dark mb-4">
+              How We Work
+            </h2>
+            <p className="text-slate-500 text-lg">
+              A transparent, supportive path to your professional growth.
+            </p>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-brand-dark tracking-tight">
-            How We Work
-          </h2>
-          <p className="text-slate-500 mt-6 text-lg leading-relaxed">
-            We make the entire hiring process smooth, safe, and stress-free for your journey to Germany.
-          </p>
+          <button className="hidden md:flex items-center gap-2 text-brand-green font-bold hover:text-emerald-600 transition-colors">
+            Start Application <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {steps.map((step) => (
-            <div 
-              key={step.id} 
-              className="group relative bg-white p-8 md:p-10 rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl hover:shadow-brand-dark/10 hover:border-brand-green/50 transition-all duration-500 ease-out hover:-translate-y-2"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {steps.map((step, index) => (
+            <div
+              key={step.id}
+              className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:border-brand-green hover:shadow-lg transition-all duration-300 group"
             >
-              
-              {/* Header Row: Icon & ID */}
-              <div className="flex justify-between items-start mb-8">
-                {/* Icon Box */}
-                <div className="w-16 h-16 rounded-2xl bg-brand-dark flex items-center justify-center shadow-lg group-hover:bg-brand-green transition-colors duration-500">
-                  <step.icon className="w-7 h-7 text-white transition-transform duration-500 group-hover:scale-110" />
-                </div>
-
-                {/* Roman Numeral Badge */}
-                <span className="text-3xl font-bold text-slate-100 group-hover:text-brand-dark/5 transition-colors duration-500 select-none font-serif italic">
+              <div className="flex justify-between items-start mb-6">
+                <span className="text-4xl font-bold text-slate-300 group-hover:text-brand-green transition-colors">
                   {step.id}
                 </span>
+                <div className="p-3 bg-brand-green rounded-full text-slate-400 group-hover:text-brand-green transition-colors">
+                  <step.icon className="w-5 h-5 md:w-8 md:h-8 text-brand-dark" />
+                </div>
               </div>
 
-              {/* Content */}
-              <h3 className="text-2xl font-bold text-brand-dark mb-4 group-hover:text-brand-green transition-colors duration-300">
+              <h3 className="text-lg font-bold text-brand-dark mb-2">
                 {step.title}
               </h3>
-              <p className="text-slate-500 leading-relaxed text-base">
+              <p className="text-slate-500 text-sm leading-relaxed">
                 {step.desc}
               </p>
-
-              {/* Bottom Decorative Line */}
-              <div className="absolute bottom-8 left-10 right-10 h-px bg-slate-100 group-hover:bg-brand-green/20 transition-colors duration-500"></div>
             </div>
           ))}
-        </div>
 
+          {/* Last Card CTA (Fills the gap in the grid) */}
+          <div className="bg-brand-dark p-8 rounded-2xl flex flex-col justify-center items-center text-center group cursor-pointer hover:bg-[#1f2b45] transition-colors">
+            <h3 className="text-xl font-bold text-white mb-2">
+              Ready to start?
+            </h3>
+            <p className="text-slate-400 text-sm mb-6">
+              Create your profile in 5 minutes.
+            </p>
+            <div className="w-12 h-12 bg-brand-green rounded-full flex items-center justify-center text-brand-dark group-hover:scale-110 transition-transform">
+              <ArrowRight className="w-6 h-6" />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

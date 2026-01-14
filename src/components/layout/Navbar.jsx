@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { Menu, X, ArrowRight, User } from "lucide-react";
+import { Menu, X, ArrowRight, User, Instagram, Linkedin, Twitter, ChevronRight } from "@/components/icons";
 import LogoImage from "@/assets/images/logo.webp";
 
 const Navbar = () => {
@@ -8,7 +8,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
-  // Scroll Detection
+  // 1. Scroll Detection (Only for background style, NOT size)
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -17,161 +17,177 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close Mobile Menu on Route Change
+  // 2. Close Menu on Route Change
   useEffect(() => {
     setIsOpen(false);
+    document.body.style.overflow = "unset";
   }, [location]);
 
-  // Lock Body Scroll
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "unset";
-  }, [isOpen]);
+  // 3. Toggle Logic
+  const toggleMenu = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+      document.body.style.overflow = "hidden";
+    } else {
+      setIsOpen(false);
+      document.body.style.overflow = "unset";
+    }
+  };
 
-  // Desktop Link Styles
-  // ADDED: 'whitespace-nowrap' to prevent line breaking
-  const navLinkClass = ({ isActive }) =>
-    `px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap ${
-      isActive
-        ? "bg-white text-brand-dark shadow-md font-bold transform scale-105"
+  const closeMenu = () => {
+    setIsOpen(false);
+    document.body.style.overflow = "unset";
+  };
+
+  // --- STYLES ---
+  const navLinkDesktop = ({ isActive }) =>
+    `px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
+      isActive 
+        ? "bg-white text-brand-dark shadow-md scale-105" 
         : "text-slate-400 hover:text-white hover:bg-white/5"
     }`;
 
-  // Mobile Link Styles
-  const mobileLinkClass = ({ isActive }) =>
-    `text-4xl font-extrabold tracking-tight transition-all duration-300 ${
-      isActive ? "text-brand-green" : "text-white hover:text-slate-300"
+  // Mobile Link Style
+  const navLinkMobile = ({ isActive }) =>
+    `text-3xl font-bold flex items-center justify-between py-3 border-b border-white/5 transition-all duration-300 ${
+      isActive ? "text-brand-green pl-2" : "text-white hover:text-slate-300"
     }`;
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-full z-50 flex justify-center pt-6 px-4 pointer-events-none">
-        
-        {/* === FLOATING NAV CONTAINER === */}
-        <nav
-          className={`
-            pointer-events-auto
-            grid grid-cols-3 items-center 
-            bg-[#161F33]/90 backdrop-blur-2xl border border-white/10 shadow-2xl
-            transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]
-            ${
-              isScrolled
-                ? "w-full max-w-[1200px] rounded-full px-5 py-3 shadow-brand-dark/50" // Made wider (1200px)
-                : "w-full max-w-[1500px] rounded-2xl px-8 py-5"
-            }
-          `}
-        >
-          {/* --- 1. LEFT: PROMINENT LOGO --- */}
-          <div className="flex justify-start min-w-0"> {/* min-w-0 prevents flex items from overflowing */}
-            <Link to="/" className="group relative z-10 block">
-              {/* White Container for Contrast + Glow */}
-              <div 
-                className={`
-                  bg-white rounded-xl flex items-center justify-center 
-                  transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)] 
-                  group-hover:shadow-[0_0_25px_rgba(107,197,81,0.4)] group-hover:scale-105
-                  ${isScrolled ? 'h-10 px-4' : 'h-14 px-6'}
-                `}
-              >
-                <img
-                  src={LogoImage}
-                  alt="Dejob"
-                  className="h-full w-auto object-contain"
-                />
+      {/* 
+        ================================================================
+        1. THE NAVBAR (FIXED HEIGHT)
+        - Mobile Height: h-20 (80px)
+        - Desktop Height: h-24 (96px)
+        - NO shrinking classes added based on scroll
+        ================================================================ 
+      */}
+      <nav 
+        className={`fixed top-0 left-0 w-full z-[100] transition-colors duration-300 border-b border-white/5
+          h-20 md:h-24 
+          ${isScrolled || isOpen ? "bg-[#161F33]/95 backdrop-blur-xl shadow-2xl" : "bg-[#161F33]"}
+        `}
+      >
+        <div className="container mx-auto px-4 md:px-8 h-full flex items-center justify-between">
+          
+          {/* --- LEFT: LOGO --- */}
+          <div className="flex-1 flex items-center justify-start gap-4 md:gap-6">
+            <Link to="/" className="flex-shrink-0 group z-[101]" onClick={closeMenu}>
+              <div className="bg-white rounded-xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-105 p-1.5 md:p-2 h-10 w-10 md:h-12 md:w-12">
+                <img src={LogoImage} alt="Dejob" className="h-full w-full object-contain" />
               </div>
             </Link>
-          </div>
 
-          {/* --- 2. CENTER: SYMMETRICAL NAVIGATION --- */}
-          {/* Using flex-shrink-0 to ensure this section refuses to shrink below its content size */}
-          <div className="hidden md:flex justify-center shrink-0">
-            <div className={`
-              flex items-center gap-1 bg-black/20 rounded-full border border-white/5 backdrop-blur-md transition-all duration-300
-              ${isScrolled ? 'p-1' : 'p-1.5'}
-            `}>
-              <NavLink to="/" className={navLinkClass}>
-                Home
-              </NavLink>
-              <NavLink to="/listing" className={navLinkClass}>
-                Find Jobs
-              </NavLink>
-              <NavLink to="/about" className={navLinkClass}>
-                About
-              </NavLink>
-              <NavLink to="/contact" className={navLinkClass}>
-                Contact
-              </NavLink>
+            {/* Socials (Desktop Only) */}
+            <div className={`hidden lg:flex items-center gap-3 pl-6 border-l border-white/10 transition-opacity duration-300 ${isScrolled ? 'opacity-50' : 'opacity-100'}`}>
+               <a href="#" className="text-slate-400 hover:text-brand-green transition-colors"><Instagram className="w-5 h-5" /></a>
+               <a href="#" className="text-slate-400 hover:text-brand-green transition-colors"><Twitter className="w-5 h-5" /></a>
+               <a href="#" className="text-slate-400 hover:text-brand-green transition-colors"><Linkedin className="w-5 h-5" /></a>
             </div>
           </div>
 
-          {/* --- 3. RIGHT: AUTH ACTIONS --- */}
-          <div className="hidden md:flex justify-end items-center gap-3 lg:gap-4 min-w-0">
-            <Link
-              to="/login"
-              className="flex items-center gap-2 text-sm font-bold text-slate-300 hover:text-white transition-colors whitespace-nowrap"
-            >
-              <User className="w-4 h-4" />
-              Sign In
-            </Link>
-            <Link
-              to="/signup"
-              className={`
-                bg-brand-green text-brand-dark hover:bg-white hover:text-brand-dark 
-                text-sm font-bold rounded-full transition-all duration-300 
-                flex items-center gap-2 shadow-lg shadow-brand-green/20 whitespace-nowrap
-                ${isScrolled ? 'px-5 py-2.5' : 'px-8 py-3.5'}
-              `}
-            >
-              Get Started <ArrowRight className="w-4 h-4 hidden lg:block" />
-            </Link>
+          {/* --- CENTER: DESKTOP NAV --- */}
+          <div className="hidden md:flex justify-center">
+            <div className="flex items-center gap-1 bg-[#0f1624] rounded-full border border-white/5 shadow-inner p-1.5">
+              <NavLink to="/" className={navLinkDesktop}>Home</NavLink>
+              <NavLink to="/listing" className={navLinkDesktop}>Jobs</NavLink>
+              <NavLink to="/about" className={navLinkDesktop}>About</NavLink>
+              <NavLink to="/contact" className={navLinkDesktop}>Contact</NavLink>
+            </div>
           </div>
 
-          {/* MOBILE TOGGLE (Hidden on Desktop) */}
-          <div className="md:hidden flex justify-end col-span-2">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="bg-white/10 text-white p-3 rounded-full hover:bg-white/20 transition-colors border border-white/5"
+          {/* --- RIGHT: ACTIONS --- */}
+          <div className="flex-1 flex items-center justify-end gap-4">
+            <Link to="/login" className="hidden md:flex items-center gap-2 text-sm font-bold text-slate-300 hover:text-white transition-colors">
+              <User className="w-4 h-4" /> <span>Sign In</span>
+            </Link>
+
+            <Link to="/signup" className="hidden md:flex bg-brand-green hover:bg-white hover:text-brand-dark text-brand-dark font-bold text-xs rounded-full transition-all items-center gap-2 shadow-lg shadow-brand-green/10 px-6 py-3">
+              Get Started <ArrowRight className="w-4 h-4"/>
+            </Link>
+            
+            {/* MOBILE TOGGLE (Fixed Position) */}
+            <button 
+              onClick={toggleMenu}
+              className="md:hidden relative z-[101] bg-white/10 text-white p-2.5 rounded-full hover:bg-white/20 transition-colors border border-white/5 active:scale-95"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-        </nav>
-      </header>
 
-      {/* --- MOBILE MENU OVERLAY --- */}
-      <div
-        className={`fixed inset-0 z-40 bg-[#161F33] transition-all duration-500 md:hidden flex flex-col justify-between px-8 pb-12 pt-36 ${
-          isOpen
-            ? "opacity-100 visible translate-y-0"
-            : "opacity-0 invisible -translate-y-10 pointer-events-none"
-        }`}
+        </div>
+      </nav>
+
+      {/* 
+        ================================================================
+        2. MOBILE MENU OVERLAY
+        - Padding top matches the Navbar height exactly (pt-20 / pt-24)
+        ================================================================ 
+      */}
+      <div 
+        className={`
+          fixed inset-0 z-[90] bg-[#161F33] flex flex-col pt-20 md:pt-24
+          transition-all duration-500 ease-[cubic-bezier(0.33,1,0.68,1)]
+          ${isOpen ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-4 invisible pointer-events-none"}
+        `}
       >
-        {/* Background Effects */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-green/10 rounded-full blur-[100px] pointer-events-none"></div>
+        {/* Background Decor */}
+        <div className={`absolute top-0 right-0 w-full h-[50vh] bg-brand-green/5 rounded-full blur-[100px] pointer-events-none transition-opacity duration-1000 ${isOpen ? 'opacity-100' : 'opacity-0'}`}></div>
 
-        {/* Links */}
-        <div className="flex flex-col gap-8 relative z-10">
-          <NavLink to="/" className={mobileLinkClass}>Home</NavLink>
-          <NavLink to="/listing" className={mobileLinkClass}>Find Jobs</NavLink>
-          <NavLink to="/about" className={mobileLinkClass}>About Us</NavLink>
-          <NavLink to="/contact" className={mobileLinkClass}>Contact</NavLink>
+        {/* --- MOBILE LINKS --- */}
+        <div className="flex-1 px-6 pt-8 flex flex-col gap-2 overflow-y-auto">
+          {['Home', 'Find Jobs', 'About Us', 'Contact'].map((item, idx) => {
+             const path = item === 'Home' ? '/' : item === 'Find Jobs' ? '/listing' : `/${item.split(' ')[0].toLowerCase()}`;
+             return (
+               <NavLink 
+                 key={item} 
+                 to={path}
+                 onClick={closeMenu}
+                 className={navLinkMobile}
+                 style={{ 
+                   transitionDelay: `${idx * 50}ms`,
+                   transform: isOpen ? 'translateY(0)' : 'translateY(10px)',
+                   opacity: isOpen ? 1 : 0
+                 }}
+               >
+                 {item}
+                 <ChevronRight className="w-5 h-5 text-white/20" />
+               </NavLink>
+             );
+          })}
         </div>
 
-        {/* Mobile Footer */}
-        <div className="space-y-4">
-          <Link
-            to="/signup"
-            className="w-full flex justify-center items-center gap-2 bg-brand-green text-white font-bold py-5 rounded-2xl shadow-xl shadow-brand-green/20 text-lg"
-          >
-            Create Account
-          </Link>
-          <div className="flex items-center justify-center gap-2 text-slate-400">
-            <span>Already have an account?</span>
-            <Link to="/login" className="text-white font-bold underline decoration-brand-green underline-offset-4">
-              Log In
-            </Link>
-          </div>
+        {/* --- MOBILE FOOTER --- */}
+        <div className={`p-6 pb-10 space-y-4 bg-black/20 border-t border-white/5 transition-all duration-500 delay-200 ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+           <Link to="/signup" onClick={closeMenu} className="w-full bg-brand-green text-brand-dark font-bold text-lg py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform">
+              Create Account
+           </Link>
+           <div className="grid grid-cols-2 gap-4">
+              <Link to="/login" onClick={closeMenu} className="flex items-center justify-center py-3 bg-white/5 text-white font-bold rounded-xl border border-white/10 active:bg-white/10">
+                 Log In
+              </Link>
+              <Link to="/post-job" onClick={closeMenu} className="flex items-center justify-center py-3 bg-white/5 text-white font-bold rounded-xl border border-white/10 active:bg-white/10">
+                 Employers
+              </Link>
+           </div>
+           
+           {/* Mobile Socials */}
+           <div className="flex justify-center gap-6 pt-4 text-slate-400">
+              <Instagram className="w-6 h-6 hover:text-brand-green transition-colors"/>
+              <Twitter className="w-6 h-6 hover:text-brand-green transition-colors"/>
+              <Linkedin className="w-6 h-6 hover:text-brand-green transition-colors"/>
+           </div>
         </div>
+
       </div>
+
+      {/* 
+        3. LAYOUT SPACER 
+        Pushes content down by h-20 (Mobile) or h-24 (Desktop)
+        so the first section isn't hidden.
+      */}
+      <div className="h-20 md:h-24 w-full"></div>
     </>
   );
 };
