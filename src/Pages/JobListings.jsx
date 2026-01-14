@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import JobHeader from "@/components/joblistings/JobHeader";
@@ -6,95 +6,51 @@ import FilterSection from "@/components/joblistings/Filter";
 import JobCards from "@/components/joblistings/JobCards";
 import Pagination from "@/components/common/Pagination";
 import JobSorting from "@/components/joblistings/Sorting";
+import JobCardSkeleton from "@/components/joblistings/JobCardSkeleton";
 import { Funnel } from "@/components/icons";
-// --- DATA ---
-const JOBS = [
-  {
-    id: 1,
-    title: "Senior Product Designer",
-    company: "Zalando",
-    location: "Berlin, DE",
-    type: "Full Time",
-    salary: "€75k - €95k",
-    posted: "2 hours ago",
-    logo: "https://ui-avatars.com/api/?name=Zalando&background=FF9900&color=fff&size=128",
-    bg: "bg-orange-50",
-    tags: ["UI/UX", "Figma", "English"],
-    featured: true,
-  },
-  {
-    id: 2,
-    title: "Frontend Engineer (React)",
-    company: "N26",
-    location: "Remote (Germany)",
-    type: "Full Time",
-    salary: "€65k - €85k",
-    posted: "5 hours ago",
-    logo: "https://ui-avatars.com/api/?name=N26&background=36A18B&color=fff&size=128",
-    bg: "bg-teal-50",
-    tags: ["React", "TypeScript", "Fintech"],
-    featured: false,
-  },
-  {
-    id: 3,
-    title: "Marketing Manager",
-    company: "HelloFresh",
-    location: "Berlin, DE",
-    type: "Hybrid",
-    salary: "€55k - €70k",
-    posted: "1 day ago",
-    logo: "https://ui-avatars.com/api/?name=HelloFresh&background=91C949&color=fff&size=128",
-    bg: "bg-green-50",
-    tags: ["Growth", "SEO", "German C1"],
-    featured: false,
-  },
-  {
-    id: 4,
-    title: "Backend Developer (Go)",
-    company: "Trade Republic",
-    location: "Berlin, DE",
-    type: "Contract",
-    salary: "€800 / day",
-    posted: "2 days ago",
-    logo: "https://ui-avatars.com/api/?name=Trade+Republic&background=111111&color=fff&size=128",
-    bg: "bg-slate-100",
-    tags: ["Golang", "AWS", "English"],
-    featured: false,
-  },
-  {
-    id: 5,
-    title: "Head of Product",
-    company: "SAP",
-    location: "Walldorf, DE",
-    type: "Full Time",
-    salary: "€120k+",
-    posted: "3 days ago",
-    logo: "https://ui-avatars.com/api/?name=SAP&background=008FD3&color=fff&size=128",
-    bg: "bg-blue-50",
-    tags: ["Management", "SaaS", "German C2"],
-    featured: true,
-  },
-  {
-    id: 6,
-    title: "Customer Support Lead",
-    company: "Lufthansa",
-    location: "Frankfurt, DE",
-    type: "On-site",
-    salary: "€45k - €55k",
-    posted: "4 days ago",
-    logo: "https://ui-avatars.com/api/?name=Lufthansa&background=05164d&color=fff&size=128",
-    bg: "bg-yellow-50",
-    tags: ["Support", "Team Lead"],
-    featured: false,
-  },
-];
+
+import { supabase } from "@/backend/config";
 
 const DejobListing = () => {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Define how many skeletons to show
+  const SKELETON_COUNT = 6;
+
+  const fetchJobsFromDB = async () => {
+    try {
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from("jobs")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      setJobs(data || []);
+    } catch (err) {
+      console.error("Error fetching jobs:", err.message);
+      setError("Failed to load jobs.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobsFromDB();
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 selection:bg-brand-green selection:text-white">
       <Navbar />
 
       <JobHeader />
+
       {/* --- MAIN CONTENT GRID --- */}
       <div className="container mx-auto px-4 mt-5 relative z-20 pb-20">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -158,18 +114,43 @@ const DejobListing = () => {
 
           {/* RIGHT CONTENT (JOB FEED) */}
           <main className="flex-1">
-            <JobSorting />
+            {jobs && <JobSorting jobLength={jobs.length} />}
+
+            {/* Error Message */}
+            {error && (
+              <div className="p-4 bg-red-50 text-red-600 rounded-xl mb-6 text-center text-sm font-bold">
+                {error}
+              </div>
+            )}
 
             <div className="grid gap-4">
-              {JOBS.map((job) => (
-                <JobCards key={job.id} job={job} />
-              ))}
+              {loading ? (
+                // SKELETON STATE
+                Array.from({ length: SKELETON_COUNT }).map((_, index) => (
+                  <JobCardSkeleton key={index} />
+                ))
+              ) : jobs.length > 0 ? (
+                // DATA STATE
+                jobs.map((job) => <JobCards key={job.id} job={job} />)
+              ) : (
+                // EMPTY STATE
+                <div className="text-center py-20 bg-white rounded-2xl border border-slate-100">
+                  <p className="text-slate-500 font-medium">
+                    No jobs found matching your criteria.
+                  </p>
+                  <button
+                    onClick={fetchJobsFromDB}
+                    className="mt-4 text-brand-green font-bold text-sm hover:underline"
+                  >
+                    Refresh
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* Pagination */}
+            <Pagination />
           </main>
         </div>
-        <Pagination />
       </div>
 
       <Footer />

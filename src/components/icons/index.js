@@ -30,6 +30,7 @@ export {
   Star, // Whole Home Page Icons
   Clock,
   Bookmark,
+  Banknote,
   Funnel, // Whole Job Listing Page Icons
   Globe,
   MessageSquare, // Whole Contact Page Icons
