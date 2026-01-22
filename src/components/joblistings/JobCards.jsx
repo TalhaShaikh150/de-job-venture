@@ -2,31 +2,47 @@ import React from "react";
 import { MapPin, Clock, Bookmark, Building2, Globe, Banknote } from "@/components/icons";
 
 // ==========================================
-// 1. HELPER FUNCTIONS (Logic Layer)
+// 1. HELPER FUNCTIONS
 // ==========================================
 
 /**
- * Formats salary range (e.g. 60, 80 -> "€60k - €80k")
+ * Smart Salary Formatter
+ * Handles:
+ * - Large numbers (60000) -> €60k
+ * - Small numbers (80) -> €80/hr
+ * - Ranges
  */
-const formatSalary = (min, max) => {
-  if (!min && !max) return null;
-  const format = (n) => `€${n}k`;
-  if (min && max) return `${format(min)} - ${format(max)}`;
-  if (min) return `From ${format(min)}`;
-  return `Up to ${format(max)}`;
+const formatCurrency = (amount) => {
+  if (!amount) return "";
+  // If value is greater than 10,000, assume Yearly (use 'k')
+  if (amount >= 10000) {
+    return `€${Math.round(amount / 1000)}k`;
+  }
+  // If value is small, return as is (likely hourly)
+  return `€${amount}`;
 };
 
-/**
- * Formats enum strings (e.g. "full_time" -> "Full Time")
- */
+const formatSalary = (min, max, jobType = "") => {
+  if (!min && !max) return null;
+
+  // Check if likely hourly based on low value or job type
+  const isHourly = (min && min < 200) || (max && max < 200) || jobType.includes("contract");
+  const suffix = isHourly ? "/hr" : "";
+
+  if (min && max) {
+    return `${formatCurrency(min)} - ${formatCurrency(max)}${suffix}`;
+  }
+  if (min) {
+    return `From ${formatCurrency(min)}${suffix}`;
+  }
+  return `Up to ${formatCurrency(max)}${suffix}`;
+};
+
 const formatText = (text) => {
   if (!text) return "";
   return text.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 };
 
-/**
- * Calculates relative time (e.g. "2 days ago")
- */
 const timeAgo = (dateString) => {
   if (!dateString) return "Recently";
   const date = new Date(dateString);
@@ -36,16 +52,14 @@ const timeAgo = (dateString) => {
   if (diffSeconds < 60) return "Just now";
   if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)}m ago`;
   if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)}h ago`;
-  
   const diffDays = Math.floor(diffSeconds / 86400);
   if (diffDays === 1) return "Yesterday";
   if (diffDays < 7) return `${diffDays}d ago`;
-  
   return date.toLocaleDateString("en-GB", { month: "short", day: "numeric" });
 };
 
 // ==========================================
-// 2. SUB-COMPONENTS (UI Parts)
+// 2. SUB-COMPONENTS
 // ==========================================
 
 const FeaturedBadge = () => (
@@ -66,7 +80,7 @@ const CompanyLogo = ({ url, name }) => (
 
 const Tag = ({ icon: Icon, text, className }) => (
   <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold border ${className}`}>
-    {Icon && <Icon className="w-3.5 h-3.5" />}
+    {Icon && <Icon className="w-3.5 h-3.5 opacity-70" />}
     {text}
   </span>
 );
@@ -90,6 +104,9 @@ const JobCards = ({ job }) => {
     is_featured,
     created_at,
   } = job;
+
+  // Generate the formatted salary string
+  const salaryDisplay = formatSalary(salary_min, salary_max, job_type);
 
   return (
     <div
@@ -126,21 +143,27 @@ const JobCards = ({ job }) => {
         </button>
       </div>
 
-      {/* --- DETAILS ROW --- */}
+      {/* --- INFO TAGS --- */}
       <div className="flex flex-wrap gap-2 mb-5">
+        
+        {/* Job Type */}
         <Tag 
           text={formatText(job_type)} 
           className="bg-slate-50 text-slate-600 border-slate-100" 
         />
+        
+        {/* Experience */}
         <Tag 
           text={formatText(experience_level)} 
           className="bg-slate-50 text-slate-600 border-slate-100" 
         />
-        {(salary_min || salary_max) && (
+
+        {/* Salary - Highlighted */}
+        {salaryDisplay && (
           <Tag 
             icon={Banknote}
-            text={formatSalary(salary_min, salary_max)} 
-            className="bg-brand-dark/5 text-brand-dark border-brand-dark/10" 
+            text={salaryDisplay} 
+            className="bg-emerald-50 text-emerald-700 border-emerald-100" 
           />
         )}
       </div>
@@ -151,7 +174,7 @@ const JobCards = ({ job }) => {
           {skills.slice(0, 3).map((skill, idx) => (
             <span
               key={idx}
-              className="px-2.5 py-1 bg-white text-brand-green text-[10px] font-bold uppercase tracking-wide rounded-md border border-brand-green/20"
+              className="px-2.5 py-1 bg-white text-slate-600 text-[10px] font-bold uppercase tracking-wide rounded-md border border-slate-200"
             >
               {skill}
             </span>
