@@ -1,26 +1,35 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom"; // 1. Import Router Hooks
 import { Search, MapPin } from "lucide-react";
-import { setSearchTerm, setFilter } from "@/redux/features/jobs/jobsSlice"; // Adjust path
+import { setSearchTerm, setFilter } from "@/redux/features/jobs/jobsSlice";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Hook for navigation
+  const location = useLocation(); // Hook to check current page
+  
   const [activeTab, setActiveTab] = useState("what");
-
-  // Local state to hold input before user clicks "Search"
   const [localKeyword, setLocalKeyword] = useState("");
   const [localLocation, setLocalLocation] = useState("");
 
   const handleSearch = () => {
-    // 1. Dispatch Keywords ("What")
+    // 1. Save data to Redux Store
     dispatch(setSearchTerm(localKeyword));
-
-    // 2. Dispatch Location ("Where")
-    // Assuming you added a 'location' field to your filters in Step 1
     dispatch(setFilter({ name: "location", value: localLocation }));
 
-    // Optional: Scroll to results
-    window.scrollTo({ top: 500, behavior: "smooth" });
+    // 2. Navigation Logic
+    // Change "/find-jobs" to whatever your route path is defined as in App.js
+    const targetPath = "/listing"; 
+
+    if (location.pathname !== targetPath) {
+      // Case A: On Home Page -> Redirect to Jobs Page
+      // The Redux state travels with us, so the next page will read it automatically.
+      navigate(targetPath);
+    } else {
+      // Case B: Already on Jobs Page -> Just scroll to results
+      window.scrollTo({ top: 400, behavior: "smooth" });
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -31,6 +40,7 @@ const SearchBar = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto font-sans relative z-20">
+      
       {/* ================= DESKTOP VIEW ================= */}
       <div className="hidden md:flex items-center bg-white/10 backdrop-blur-xl border border-white/20 p-2 rounded-full shadow-2xl">
         {/* Keywords Input */}
