@@ -4,8 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "./loginSchema";
 import { loginWithGoogle, signUserInDB } from "@/backend/services";
 import { useState } from "react";
+import {Eye,EyeOff} from "lucide-react"
 
 function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const [formMessage, setFormMessage] = useState("");
   const {
     register,
@@ -33,7 +36,7 @@ function Login() {
       setFormMessage(
         isBadCreds
           ? "Invalid email or password"
-          : "Something went wrong. Please try again."
+          : "Something went wrong. Please try again.",
       );
 
       reset();
@@ -71,12 +74,32 @@ function Login() {
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
             Password
           </label>
-          <input
-            type="password"
-            className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300"
-            placeholder="Enter your password"
-            {...register("password")}
-          />
+
+          {/* 2. Add a relative wrapper to position the icon */}
+          <div className="relative">
+            <input
+              // 3. Toggle type based on state
+              type={showPassword ? "text" : "password"}
+              // 4. Added 'pr-12' (padding-right) so text doesn't hit the icon
+              className="w-full pl-4 pr-12 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300"
+              placeholder="Enter your password"
+              {...register("password")}
+            />
+
+            {/* 5. The Toggle Button */}
+            <button
+              type="button" // Important: prevents form submission
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              {showPassword ? (
+                <EyeOff size={20} strokeWidth={2} />
+              ) : (
+                <Eye size={20} strokeWidth={2} />
+              )}
+            </button>
+          </div>
+
           {errors.password?.message && (
             <p className="mt-1 text-sm text-red-500">
               {errors.password.message}

@@ -4,8 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "@/Pages/auth/signUpSchema";
 import { loginWithGoogle, registerUserInDB } from "@/backend/services";
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react"; // Import icons
 
 function SignUp() {
+  const [showPassword, setShowPassword] = useState(false);
   const [formMessage, setFormMessage] = useState("");
 
   const {
@@ -30,7 +32,7 @@ function SignUp() {
     } catch (error) {
       if (error.message.includes("already")) {
         setFormMessage(
-          "An account with this email already exists. Please log in."
+          "An account with this email already exists. Please log in.",
         );
         reset();
       } else {
@@ -104,12 +106,32 @@ function SignUp() {
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">
             Password
           </label>
-          <input
-            type="password"
-            className="w-full px-4 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300"
-            placeholder="Create a password"
-            {...register("password")}
-          />
+
+          {/* 2. Relative wrapper to position the icon */}
+          <div className="relative">
+            <input
+              // 3. Toggle between 'text' and 'password'
+              type={showPassword ? "text" : "password"}
+              // 4. Added 'pr-12' so text doesn't overlap the icon
+              className="w-full pl-4 pr-12 py-3.5 rounded-lg border border-slate-200 text-slate-900 focus:border-brand-dark focus:ring-1 focus:ring-brand-dark outline-none transition-all placeholder:text-slate-300"
+              placeholder="Create a password"
+              {...register("password")}
+            />
+
+            {/* 5. Toggle Button */}
+            <button
+              type="button" // Prevents form submission when clicking the eye
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+            >
+              {showPassword ? (
+                <EyeOff size={20} strokeWidth={2} />
+              ) : (
+                <Eye size={20} strokeWidth={2} />
+              )}
+            </button>
+          </div>
+
           {errors.password?.message && (
             <p className="mt-1 text-sm text-red-500">
               {errors.password.message}
