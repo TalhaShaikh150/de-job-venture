@@ -17,32 +17,25 @@ import JobCards from "@/components/joblistings/JobCards";
 import Pagination from "@/components/common/Pagination";
 import JobSorting from "@/components/joblistings/Sorting";
 import JobCardSkeleton from "@/components/joblistings/JobCardSkeleton";
-import { Funnel, Search } from "@/components/icons"; 
+import { Funnel, Search } from "@/components/icons";
 
 const DejobListing = () => {
   const dispatch = useDispatch();
 
   // 1. Get Redux State (Current UI Selection)
   const { filters, sort, searchTerm, pagination } = useSelector(
-    (state) => state.jobs
+    (state) => state.jobs,
   );
 
   // 2. API CALLS
   // Fetch ALL jobs once (Client-Side Filtering approach)
-  const { 
-    data: allJobsData, 
-    isLoading, 
-    error 
-  } = useGetAllJobsQuery();
-  
+  const { data: allJobsData, isLoading, error } = useGetAllJobsQuery();
+
   // Fetch available categories for sidebar
-  const { 
-    data: filterOptions, 
-    isLoading: filtersLoading 
-  } = useGetJobFiltersQuery();
+  const { data: filterOptions, isLoading: filtersLoading } =
+    useGetJobFiltersQuery();
 
   // 3. FILTERING LOGIC (useMemo)
-  // This runs instantly in browser memory when filters/search change
   const filteredJobs = useMemo(() => {
     // If data hasn't loaded yet, return empty
     if (!allJobsData) return [];
@@ -58,29 +51,29 @@ const DejobListing = () => {
           job.company_name.toLowerCase().includes(lowerTerm) ||
           (job.skills &&
             job.skills.some((skill) =>
-              skill.toLowerCase().includes(lowerTerm)
-            ))
+              skill.toLowerCase().includes(lowerTerm),
+            )),
       );
     }
 
     // B. Sidebar Filters Logic
-    
-    // Job Type (Multi-select)
-    if (filters.job_type && filters.job_type.length > 0) {
-      result = result.filter((job) => filters.job_type.includes(job.job_type));
+
+    // Job Type (Single Select Logic now, based on your previous request)
+    if (filters.job_type) {
+      result = result.filter((job) => job.job_type === filters.job_type);
     }
 
     // Experience (Single Select)
     if (filters.experience_level) {
       result = result.filter(
-        (job) => job.experience_level === filters.experience_level
+        (job) => job.experience_level === filters.experience_level,
       );
     }
 
     // Location (Text search from "Where" input)
     if (filters.location) {
       result = result.filter((job) =>
-        job.location.toLowerCase().includes(filters.location.toLowerCase())
+        job.location.toLowerCase().includes(filters.location.toLowerCase()),
       );
     }
 
@@ -102,16 +95,20 @@ const DejobListing = () => {
   }, [allJobsData, filters, sort, searchTerm]);
 
   // 4. PAGINATION LOGIC (useMemo)
-  // Calculate specific slice of jobs to show for current page
   const totalCount = filteredJobs.length;
-  
+
   const paginatedJobs = useMemo(() => {
+    // Fixed typo: was pagination.limitf
     const startIndex = (pagination.page - 1) * pagination.limit;
     const endIndex = startIndex + pagination.limit;
     return filteredJobs.slice(startIndex, endIndex);
   }, [filteredJobs, pagination.page, pagination.limit]);
 
-  // 5. HELPER: Check if user has active filters (for Empty State text)
+  // 5. HELPERS FOR EMPTY STATE
+  // Check if DB is totally empty (ignoring filters)
+  const isDatabaseEmpty = !isLoading && allJobsData && allJobsData.length === 0;
+
+  // Check if filters are active
   const hasActiveFilters =
     searchTerm !== "" ||
     (filters.job_type && filters.job_type.length > 0) ||
@@ -131,7 +128,6 @@ const DejobListing = () => {
 
       <div className="container mx-auto px-4 mt-5 relative z-20 pb-20">
         <div className="flex flex-col lg:flex-row gap-8">
-          
           {/* --- LEFT SIDEBAR (FILTERS) --- */}
           <aside className="lg:w-72 flex-shrink-0">
             <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 p-6 border border-slate-100 sticky top-24">
@@ -157,11 +153,11 @@ const DejobListing = () => {
                 </div>
               ) : (
                 <>
-                  {/* Job Type (Multi-Select) */}
+                  {/* Job Type (Single-Select) */}
                   <FilterSection
                     title="Job Type"
                     filterKey="job_type"
-                    isMulti={true}
+                    isMulti={false}
                     options={filterOptions?.job_type || []}
                   />
 
@@ -200,13 +196,8 @@ const DejobListing = () => {
 
           {/* --- RIGHT CONTENT (JOB FEED) --- */}
           <main className="flex-1">
-            
             {/* Sorting & Count */}
-            {/* Note: Pass isLoading so the loader doesn't spin forever on 0 results */}
-            <JobSorting 
-              jobLength={totalCount} 
-              isLoading={isLoading} 
-            />
+            <JobSorting jobLength={totalCount} isLoading={isLoading} />
 
             {/* Error Message */}
             {error && (
@@ -232,17 +223,22 @@ const DejobListing = () => {
                     <Search className="text-slate-300 w-8 h-8" />
                   </div>
 
+                  {/* 1. Title Logic */}
                   <h3 className="text-lg font-bold text-slate-900 mb-2">
-                    {hasActiveFilters ? "No matches found" : "No jobs posted yet"}
+                    {isDatabaseEmpty
+                      ? "No jobs posted yet"
+                      : "No matches found"}
                   </h3>
 
+                  {/* 2. Description Logic */}
                   <p className="text-slate-500 font-medium max-w-sm mb-6">
-                    {hasActiveFilters
-                      ? "We couldn't find any jobs matching your current search. Try adjusting your filters or search terms."
-                      : "We are currently sourcing new opportunities. Please check back later!"}
+                    {isDatabaseEmpty
+                      ? "We are currently sourcing new opportunities. Please check back later!"
+                      : "We couldn't find any jobs matching your current search. Try adjusting your filters or search terms."}
                   </p>
 
-                  {hasActiveFilters && (
+                  {/* 3. Button Logic: Only show clear button if NOT empty DB */}
+                  {!isDatabaseEmpty && hasActiveFilters && (
                     <button
                       onClick={() => dispatch(resetFilters())}
                       className="px-6 py-2.5 bg-brand-green text-white font-bold rounded-xl hover:bg-emerald-600 hover:shadow-lg hover:shadow-brand-green/20 transition-all"
@@ -255,10 +251,7 @@ const DejobListing = () => {
             </div>
 
             {/* Pagination */}
-            {/* Only show if we have jobs to paginate */}
-            {paginatedJobs.length > 0 && (
-              <Pagination totalCount={totalCount} />
-            )}
+            {paginatedJobs.length > 0 && <Pagination totalCount={totalCount} />}
           </main>
         </div>
       </div>

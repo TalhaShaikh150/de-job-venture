@@ -4,7 +4,7 @@ const initialState = {
   searchTerm: "", // For the search bar
   filters: {
     location: "", // <--- ADD THIS
-    job_type: [], // e.g. ['contract', 'full-time']
+    job_type:"", // e.g. ['contract', 'full-time']
     experience_level: "", // e.g. 'senior'
     is_remote: false,
     min_salary: 0,
@@ -12,7 +12,7 @@ const initialState = {
   sort: "newest", // 'newest', 'salary_high', 'salary_low'
   pagination: {
     page: 1,
-    limit: 10,
+    limit: 20,
   },
 };
 
