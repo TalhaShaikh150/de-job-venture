@@ -9,6 +9,7 @@ import Login from "@/Pages/auth/Login";
 import SignUp from "@/Pages/auth/SignUp";
 import AuthLayout from "@/Pages/auth/AuthLayout";
 import Contact from "@/Pages/Contact";
+import JobDetailsPage from "@/Pages/JobDetailsPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/listing" element={<DejobSearch />} />
+      <Route path="/jobs/:id" element={<JobDetailsPage />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<Contact />} />
 

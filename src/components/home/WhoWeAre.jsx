@@ -1,5 +1,5 @@
 import React from "react";
-import { ShieldCheck, Users, Briefcase } from "@/components/icons"; // Using Lucide for cleaner icons
+import { ShieldCheck, Users, Briefcase } from "lucide-react"; // Using Lucide for cleaner icons
 
 const WhoWeAre = () => {
   return (

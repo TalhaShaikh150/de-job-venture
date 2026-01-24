@@ -6,7 +6,7 @@ import {
   ChevronRight,
   CheckCircle2,
   Zap,
-} from "@/components/icons";
+} from "lucide-react";
 
 const WhyChoose = () => {
   return (

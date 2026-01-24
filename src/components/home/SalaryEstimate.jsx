@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronDown } from "@/components/icons";
+import { ChevronDown } from "lucide-react";
 const SalaryEstimate = () => {
   return (
     <>
