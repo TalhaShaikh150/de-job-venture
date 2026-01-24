@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, Link } from "react-router-dom";
-import { Star } from "@/components/icons";
+import { Star } from "lucide-react";
 
 const AuthLayout = () => {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { MoveRight } from "@/components/icons";
+import { MoveRight } from "lucide-react";
 
 const cities = [
   {

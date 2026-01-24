@@ -1,13 +1,13 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSort } from "@/redux/features/jobs/jobsSlice"; 
-import { ChevronDown } from "@/components/icons";
+import { setSort } from "@/redux/features/jobs/jobsSlice";
+import { ChevronDown } from "lucide-react";
 import Loader from "@/components/common/Loader";
 
 // 1. Add isLoading to props
 const JobSorting = ({ jobLength, isLoading }) => {
   const dispatch = useDispatch();
-  
+
   const currentSort = useSelector((state) => state.jobs.sort);
 
   const handleSortChange = (e) => {
@@ -21,11 +21,7 @@ const JobSorting = ({ jobLength, isLoading }) => {
         Showing{" "}
         <span className="items-center font-bold text-slate-900">
           {/* 2. Update Logic: Only load if explicitly loading. Otherwise show 0. */}
-          {isLoading ? (
-            <Loader size="w-6 h-6" />
-          ) : (
-            jobLength
-          )}
+          {isLoading ? <Loader size="w-6 h-6" /> : jobLength}
         </span>{" "}
         jobs
       </p>
@@ -37,7 +33,7 @@ const JobSorting = ({ jobLength, isLoading }) => {
         </span>
 
         <div className="relative w-full  group">
-          <select 
+          <select
             value={currentSort}
             onChange={handleSortChange}
             className="appearance-none w-full bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-sm font-semibold rounded-lg pl-4 pr-10 py-2.5 focus:ring-2 focus:ring-brand-green/20 focus:border-brand-green outline-none transition-all cursor-pointer"

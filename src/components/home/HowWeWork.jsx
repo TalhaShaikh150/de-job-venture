@@ -6,7 +6,7 @@ import {
   Briefcase,
   Smile,
   ArrowRight,
-} from "@/components/icons";
+} from "lucide-react";
 
 const steps = [
   {
@@ -41,7 +41,7 @@ const steps = [
   },
 ];
 
-const HowWeWork= () => {
+const HowWeWork = () => {
   return (
     <section className="py-20 lg:py-28 bg-slate-50 font-sans">
       <div className="container mx-auto px-6">

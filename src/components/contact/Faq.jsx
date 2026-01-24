@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // --- SUB-COMPONENTS ---
-import { ArrowRight ,ChevronDown } from "@/components/icons";
+import { ArrowRight, ChevronDown } from "lucide-react";
 const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -48,7 +48,7 @@ const FAQItem = ({ question, answer }) => {
 const Faq = () => {
   return (
     <>
-         {/* ==================== 3. FAQ SECTION ==================== */}
+      {/* ==================== 3. FAQ SECTION ==================== */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-16">
@@ -91,11 +91,9 @@ const Faq = () => {
                 answer="Yes. Many of our partner companies offer visa sponsorship. Make sure to filter jobs by 'Visa Sponsorship Available' when searching."
               />
             </div>
-            
           </div>
         </div>
       </section>
-
     </>
   );
 };
