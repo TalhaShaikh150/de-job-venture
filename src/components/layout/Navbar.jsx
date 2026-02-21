@@ -158,7 +158,7 @@ const Navbar = () => {
               to="/signup"
               className="hidden md:flex bg-brand-green hover:bg-white hover:text-brand-dark text-brand-dark font-bold text-xs rounded-full transition-all items-center gap-2 shadow-lg shadow-brand-green/10 px-6 py-3"
             >
-              Get Started <ArrowRight className="w-4 h-4" />
+              Create an account <ArrowRight className="w-4 h-4" />
             </Link>
 
             {/* MOBILE TOGGLE (Fixed Position) */}
@@ -231,7 +231,7 @@ const Navbar = () => {
             onClick={closeMenu}
             className="w-full bg-brand-green text-brand-dark font-bold text-lg py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform"
           >
-            Create Account
+            Create an account
           </Link>
           <div className="grid grid-cols-2 gap-4">
             <Link
