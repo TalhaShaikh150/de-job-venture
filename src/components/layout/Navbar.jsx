@@ -81,19 +81,26 @@ const Navbar = () => {
         <div className="container mx-auto px-4 md:px-8 h-full flex items-center justify-between">
           {/* --- LEFT: LOGO --- */}
           <div className="flex-1 flex items-center justify-start gap-4 md:gap-6">
-            <Link
-              to="/"
-              className="flex-shrink-0 group z-[101]"
-              onClick={closeMenu}
-            >
-              <div className="bg-white rounded-xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-105 p-1.5 md:p-2 h-10 w-10 md:h-12 md:w-12">
-                <img
-                  src={LogoImage}
-                  alt="Dejob"
-                  className="h-full w-full object-contain"
-                />
-              </div>
-            </Link>
+            {/* REPLACE YOUR <img ... /> TAG WITH THIS: */}
+<Link to="/" className="flex-shrink-0 group z-[101]" onClick={closeMenu}>
+  <div className="flex flex-col items-center justify-center leading-none select-none">
+    {/* The Monogram */}
+    <h1 className="text-3xl md:text-4xl font-black tracking-tighter flex items-center gap-0.5">
+      <span className="text-white drop-shadow-md">D</span>
+      <span className="text-brand-green drop-shadow-[0_0_10px_rgba(34,197,94,0.5)]">J</span>
+      <span className="text-white drop-shadow-md">V</span>
+    </h1>
+    
+    {/* The Full Name */}
+    <div className="flex items-center gap-1.5 mt-0.5">
+      <div className="h-[1px] w-3 bg-brand-green/50"></div>
+      <span className="text-[9px] font-bold text-slate-400 tracking-[0.2em] uppercase group-hover:text-white transition-colors">
+        DE JOB VENTURE
+      </span>
+      <div className="h-[1px] w-3 bg-brand-green/50"></div>
+    </div>
+  </div>
+</Link>
 
             {/* Socials (Desktop Only) */}
             <div

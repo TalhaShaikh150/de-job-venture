@@ -24,12 +24,25 @@ const AuthLayout = () => {
 
         {/* Brand Header */}
         <div className="relative z-10">
-          <Link to="/" className="flex items-center gap-3 group w-fit">
-            <div className="w-10 h-10 bg-brand-green rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-brand-green/20 group-hover:scale-105 transition-transform">
-              DJ
-            </div>
-            <span className="text-2xl font-bold tracking-tight">Dejob.</span>
-          </Link>
+         <Link to="/" className="flex-shrink-0 group z-[101]" >
+           <div className="flex flex-col justify-center leading-none select-none">
+             {/* The Monogram */}
+             <h1 className="text-3xl md:text-4xl font-black tracking-tighter flex items-center gap-0.5">
+               <span className="text-white drop-shadow-md">D</span>
+               <span className="text-brand-green drop-shadow-[0_0_10px_rgba(34,197,94,0.5)]">J</span>
+               <span className="text-white drop-shadow-md">V</span>
+             </h1>
+             
+             {/* The Full Name */}
+             <div className="flex items-center gap-1.5 mt-0.5">
+               <div className="h-[1px] w-3 bg-brand-green/50"></div>
+               <span className="text-[9px] font-bold text-slate-400 tracking-[0.2em] uppercase group-hover:text-white transition-colors">
+                 DE JOB VENTURE
+               </span>
+               <div className="h-[1px] w-3 bg-brand-green/50"></div>
+             </div>
+           </div>
+         </Link>
         </div>
 
         {/* Testimonial Card (Glassmorphism) */}

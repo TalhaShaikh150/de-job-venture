@@ -1,5 +1,7 @@
 import React from "react";
+
 import { Sparkles, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTA = () => {
   return (
@@ -35,13 +37,13 @@ const CTA = () => {
 
         {/* Action Area */}
         <div className="flex flex-col items-center">
-          <a
-            href="/signup"
+          <Link
+            to="/signup"
             className="group flex items-center gap-3 px-10 py-5 text-lg font-bold text-brand-dark bg-brand-green rounded-xl hover:bg-white transition-all duration-300 transform hover:-translate-y-1"
           >
             Register Now
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </a>
+          </Link>
           
           <div className="mt-8 flex items-center gap-6 text-sm text-slate-500 font-medium">
              <span className="flex items-center gap-2">
