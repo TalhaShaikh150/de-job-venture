@@ -22,11 +22,11 @@ const Home = () => {
       <Recruiters />
       <WhoWeAre />
       <HowWeWork />
-      <CTAProfile />
+      {/* <CTAProfile /> */}
       <WhyChoose />
       <TopCities />
       <LatestOpportunities />
-      <SalaryEstimate />
+      {/* <SalaryEstimate /> */}
       <SuccessStories />
       <Footer />
     </>

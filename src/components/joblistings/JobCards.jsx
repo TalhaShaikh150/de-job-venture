@@ -71,7 +71,7 @@ const FeaturedBadge = () => (
 );
 
 const CompanyLogo = ({ url, name }) => (
-  <div className="w-14 h-14 rounded-xl flex items-center justify-center p-1 border border-slate-100 bg-white shadow-sm group-hover:scale-105 transition-transform overflow-hidden shrink-0">
+  <div className="w-16 h-14 rounded-xl flex items-center justify-center  border border-slate-100 bg-white shadow-sm group-hover:scale-105 transition-transform overflow-hidden shrink-0">
     {url ? (
       <img
         src={url}
