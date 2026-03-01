@@ -11,6 +11,7 @@ export async function registerUserInDB({
       email,
       password,
       options: {
+        emailRedirectTo: "https://de-job-venture.vercel.app/login",
         data: {
           firstName,
           lastName,
@@ -21,7 +22,6 @@ export async function registerUserInDB({
     if (error) throw error;
 
     if (data.user && data.user.identities.length === 0) {
-      // user already exists
       throw new Error("Email already registered. Please log in.");
     }
 
