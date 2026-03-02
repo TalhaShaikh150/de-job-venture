@@ -9,6 +9,7 @@ import { Eye, EyeOff } from "lucide-react"; // Import icons
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [formMessage, setFormMessage] = useState("");
+const [accountCreated, setAccountCreated] = useState(false);
 
   const {
     register,
@@ -27,7 +28,7 @@ function SignUp() {
       const data = await registerUserInDB(formData);
 
       reset();
-
+      setAccountCreated(true);
       setFormMessage("Account created. Check your email to confirm.");
     } catch (error) {
       if (error.message.includes("already")) {
@@ -142,6 +143,12 @@ function SignUp() {
         {formMessage && (
           <p className="text-sm text-red-600 text-center">{formMessage}</p>
         )}
+
+      {accountCreated && (
+  <p className="text-sm text-green-600 text-center">
+    Account created. Check your email to confirm.
+  </p>
+)}
         <button
           className="w-full py-4 bg-brand-dark hover:bg-brand-green text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all"
           disabled={isSubmitting}

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetAllJobsQuery } from "@/redux/services/jobsApi";
-import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import {
   Building2,
@@ -50,7 +49,6 @@ const JobDetailsHero = () => {
   };
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
-      <Navbar />
 
       {/* --- HERO HEADER --- */}
       <div className="bg-brand-dark text-white pb-32 pt-12 relative overflow-hidden">

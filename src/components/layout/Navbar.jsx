@@ -12,9 +12,10 @@ const Navbar = () => {
   // Auth States
   const [user, setUser] = useState(null);
   
-  // 🚀 FIX: Initialize with cached name to prevent "Email Flash"
+  // Initialize with cached values
   const [dbName, setDbName] = useState(() => localStorage.getItem("djv_user_name")); 
-  
+  const [avatarUrl, setAvatarUrl] = useState(() => localStorage.getItem("djv_user_avatar"));
+
   const [loading, setLoading] = useState(true); 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   
@@ -29,19 +30,30 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 2. Auth Logic
+   // 2. Auth Logic & Live Updates
   useEffect(() => {
     let mounted = true;
 
-    const fetchProfileName = async (userId) => {
+    // Helper to fetch profile data from DB (Background sync)
+    const fetchProfileData = async (userId) => {
       try {
-        const { data } = await supabase.from('profiles').select('first_name, last_name').eq('id', userId).single();
+        const { data } = await supabase
+          .from('profiles')
+          .select('first_name, last_name, avatar_url')
+          .eq('id', userId)
+          .single();
+          
         if (mounted && data) {
           const full = `${data.first_name || ""} ${data.last_name || ""}`.trim();
           if (full) {
             setDbName(full);
-            // 🚀 Save to cache
             localStorage.setItem("djv_user_name", full);
+          }
+          
+          // Sync Avatar
+          if (data.avatar_url) {
+            setAvatarUrl(data.avatar_url);
+            localStorage.setItem("djv_user_avatar", data.avatar_url);
           }
         }
       } catch (err) { console.error(err); }
@@ -53,16 +65,16 @@ const Navbar = () => {
         if (mounted) {
           const currentUser = session?.user ?? null;
           setUser(currentUser);
-          
-          // Stop loading immediately
           setLoading(false); 
 
           if (currentUser) {
-            fetchProfileName(currentUser.id);
+            fetchProfileData(currentUser.id);
           } else {
-            // No user? Clear cache
+            // Logout cleanup
             localStorage.removeItem("djv_user_name");
+            localStorage.removeItem("djv_user_avatar");
             setDbName(null);
+            setAvatarUrl(null);
           }
         }
       } catch (error) { if (mounted) setLoading(false); }
@@ -70,22 +82,45 @@ const Navbar = () => {
 
     checkSession();
 
+    // Listen for Auth Changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return;
       const currentUser = session?.user ?? null;
-      setUser(currentUser);
+      setUser(prev => (prev?.id === currentUser?.id ? prev : currentUser));
       
       if (currentUser) {
-        fetchProfileName(currentUser.id);
+        fetchProfileData(currentUser.id);
       } else {
         setDbName(null);
+        setAvatarUrl(null);
         localStorage.removeItem("djv_user_name");
+        localStorage.removeItem("djv_user_avatar");
       }
       setLoading(false);
     });
-    return () => { mounted = false; subscription.unsubscribe(); };
-  }, []);
 
+    // 🚀 LIVE LISTENER: Update INSTANTLY when ProfilePage saves
+    const handleProfileUpdate = (event) => {
+      // 1. Instant Avatar Update (from CustomEvent payload)
+      if (event.detail && event.detail.avatar_url) {
+        setAvatarUrl(event.detail.avatar_url);
+        localStorage.setItem("djv_user_avatar", event.detail.avatar_url);
+      }
+
+      // 2. Background refresh for Name/Other data
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user) fetchProfileData(session.user.id);
+      });
+    };
+
+    window.addEventListener("profileUpdated", handleProfileUpdate);
+
+    return () => { 
+      mounted = false; 
+      subscription.unsubscribe(); 
+      window.removeEventListener("profileUpdated", handleProfileUpdate);
+    };
+  }, []);
   // Close menus on route change
   useEffect(() => {
     setIsOpen(false);
@@ -107,12 +142,14 @@ const Navbar = () => {
     await supabase.auth.signOut();
     setIsUserMenuOpen(false);
     setDbName(null);
-    localStorage.removeItem("djv_user_name"); // Clear cache
+    setAvatarUrl(null);
+    localStorage.removeItem("djv_user_name");
+    localStorage.removeItem("djv_user_avatar");
     setUser(null);
     navigate("/"); 
   };
 
-  // Name Resolution (DB Name > Cached Name > Metadata > Email)
+  // Name Resolution
   const displayName = dbName || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
   const initials = displayName ? displayName.charAt(0).toUpperCase() : "U";
 
@@ -154,7 +191,6 @@ const Navbar = () => {
           <div className="flex-1 flex items-center justify-end gap-4">
             
             {loading ? (
-              // Invisible placeholder
               <div className="hidden md:block w-32 h-10 opacity-0"></div>
             ) : user ? (
               // --- LOGGED IN (DESKTOP) ---
@@ -167,8 +203,12 @@ const Navbar = () => {
                       : "bg-[#0f1624] border-white/10 text-slate-300 hover:border-white/20 hover:text-white"}
                   `}
                 >
-                  <div className="w-8 h-8 rounded-full bg-brand-green flex items-center justify-center text-[#161F33] font-bold text-xs">
-                    {initials}
+                  <div className="w-8 h-8 rounded-full bg-brand-green overflow-hidden flex items-center justify-center text-[#161F33] font-bold text-xs">
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                    ) : (
+                      initials
+                    )}
                   </div>
                   <span className="text-sm font-bold max-w-[120px] truncate capitalize">
                     {displayName}
@@ -176,12 +216,11 @@ const Navbar = () => {
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isUserMenuOpen ? "rotate-180" : ""}`} />
                 </button>
 
-                {/* Dropdown */}
                 {isUserMenuOpen && (
                   <div className="absolute right-0 top-full mt-3 w-64 bg-[#1F2937] border border-gray-700 rounded-xl shadow-2xl overflow-hidden animate-fade-in z-50">
                     <div className="p-4 border-b border-gray-700">
                       <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Account</p>
-                      <p className="text-sm font-bold text-white truncate">{displayName}</p>
+                      <p className="text-sm font-bold text-white truncate capitalize">{displayName}</p>
                       <p className="text-xs text-gray-400 truncate">{user.email}</p>
                     </div>
                     <div className="p-2">
@@ -217,8 +256,6 @@ const Navbar = () => {
 
       {/* MOBILE MENU OVERLAY */}
       <div className={`fixed inset-0 z-[90] bg-[#161F33] flex flex-col pt-20 md:pt-24 transition-all duration-500 ${isOpen ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-4 invisible pointer-events-none"}`}>
-         
-         {/* Links */}
          <div className="flex-1 px-6 pt-8 flex flex-col gap-2 overflow-y-auto">
              {["Home", "Find Jobs", "About Us", "Contact"].map((item) => (
                <NavLink 
@@ -232,35 +269,29 @@ const Navbar = () => {
              ))}
          </div>
 
-         {/* ─── MOBILE BOTTOM SECTION ─── */}
          <div className="p-6 pb-10 space-y-4 bg-black/20 border-t border-white/5">
             {loading ? (
                 <div className="w-full h-14 bg-white/5 rounded-xl animate-pulse" />
             ) : user ? (
-                // LOGGED IN: Profile Bar + Logout
                 <div className="flex items-center justify-between p-2 rounded-2xl bg-white/5 border border-white/10">
-                    
-                    {/* Left: Avatar & Name -> Link to Profile */}
-                    <Link to="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-3 group pl-2">
-                        <div className="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-[#161F33] font-bold text-sm shadow-lg group-active:scale-95 transition-transform">
-                            {initials}
+                    <Link to="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-3 group pl-2 w-full">
+                        <div className="w-10 h-10 rounded-full bg-brand-green overflow-hidden flex items-center justify-center text-[#161F33] font-bold text-sm shadow-lg group-active:scale-95 transition-transform">
+                            {avatarUrl ? (
+                              <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                            ) : (
+                              initials
+                            )}
                         </div>
                         <div className="flex flex-col">
                             <span className="text-white font-bold text-sm leading-tight max-w-[140px] truncate capitalize">{displayName}</span>
                             <span className="text-[10px] text-brand-green font-medium">View Profile</span>
                         </div>
                     </Link>
-                    
-                    {/* Right: Logout Button */}
-                    <button 
-                        onClick={handleLogout} 
-                        className="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 active:bg-red-500/20 transition-colors mr-1"
-                    >
+                    <button onClick={handleLogout} className="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 active:bg-red-500/20 transition-colors mr-1 shrink-0">
                         <LogOut size={18} />
                     </button>
                 </div>
             ) : (
-                // LOGGED OUT: Login + Signup
                 <>
                   <Link to="/signup" onClick={() => setIsOpen(false)} className="w-full bg-brand-green text-brand-dark font-bold text-lg py-4 rounded-xl flex items-center justify-center">Create Account</Link>
                   <Link to="/login" onClick={() => setIsOpen(false)} className="w-full bg-white/5 text-white font-bold text-lg py-4 rounded-xl flex items-center justify-center border border-white/10">Sign In</Link>
