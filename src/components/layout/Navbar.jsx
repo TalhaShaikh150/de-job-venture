@@ -1,269 +1,274 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
+import { supabase } from "@/backend/config"; 
 import {
-  Menu,
-  X,
-  ArrowRight,
-  User,
-  Instagram,
-  Linkedin,
-  Twitter,
-  ChevronRight,
+  Menu, X, User, ChevronRight, LogOut, ChevronDown, ArrowRight
 } from "lucide-react";
-import LogoImage from "@/assets/images/logo.webp";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  
+  // Auth States
+  const [user, setUser] = useState(null);
+  
+  // 🚀 FIX: Initialize with cached name to prevent "Email Flash"
+  const [dbName, setDbName] = useState(() => localStorage.getItem("djv_user_name")); 
+  
+  const [loading, setLoading] = useState(true); 
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  
+  const dropdownRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // 1. Scroll Detection (Only for background style, NOT size)
+  // 1. Scroll Detection
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 2. Close Menu on Route Change
+  // 2. Auth Logic
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchProfileName = async (userId) => {
+      try {
+        const { data } = await supabase.from('profiles').select('first_name, last_name').eq('id', userId).single();
+        if (mounted && data) {
+          const full = `${data.first_name || ""} ${data.last_name || ""}`.trim();
+          if (full) {
+            setDbName(full);
+            // 🚀 Save to cache
+            localStorage.setItem("djv_user_name", full);
+          }
+        }
+      } catch (err) { console.error(err); }
+    };
+
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (mounted) {
+          const currentUser = session?.user ?? null;
+          setUser(currentUser);
+          
+          // Stop loading immediately
+          setLoading(false); 
+
+          if (currentUser) {
+            fetchProfileName(currentUser.id);
+          } else {
+            // No user? Clear cache
+            localStorage.removeItem("djv_user_name");
+            setDbName(null);
+          }
+        }
+      } catch (error) { if (mounted) setLoading(false); }
+    };
+
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return;
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      
+      if (currentUser) {
+        fetchProfileName(currentUser.id);
+      } else {
+        setDbName(null);
+        localStorage.removeItem("djv_user_name");
+      }
+      setLoading(false);
+    });
+    return () => { mounted = false; subscription.unsubscribe(); };
+  }, []);
+
+  // Close menus on route change
   useEffect(() => {
     setIsOpen(false);
-    document.body.style.overflow = "unset";
+    setIsUserMenuOpen(false);
   }, [location]);
 
-  // 3. Toggle Logic
-  const toggleMenu = () => {
-    if (!isOpen) {
-      setIsOpen(true);
-      document.body.style.overflow = "hidden";
-    } else {
-      setIsOpen(false);
-      document.body.style.overflow = "unset";
+  // Click outside listener
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsUserMenuOpen(false);
+      }
     }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsUserMenuOpen(false);
+    setDbName(null);
+    localStorage.removeItem("djv_user_name"); // Clear cache
+    setUser(null);
+    navigate("/"); 
   };
 
-  const closeMenu = () => {
-    setIsOpen(false);
-    document.body.style.overflow = "unset";
-  };
+  // Name Resolution (DB Name > Cached Name > Metadata > Email)
+  const displayName = dbName || user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+  const initials = displayName ? displayName.charAt(0).toUpperCase() : "U";
 
-  // --- STYLES ---
-  const navLinkDesktop = ({ isActive }) =>
-    `px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
-      isActive
-        ? "bg-white text-brand-dark shadow-md scale-105"
-        : "text-slate-400 hover:text-white hover:bg-white/5"
-    }`;
-
-  // Mobile Link Style
-  const navLinkMobile = ({ isActive }) =>
-    `text-3xl font-bold flex items-center justify-between py-3 border-b border-white/5 transition-all duration-300 ${
-      isActive ? "text-brand-green pl-2" : "text-white hover:text-slate-300"
-    }`;
+  // Styles
+  const navLinkDesktop = ({ isActive }) => `px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${isActive ? "bg-white text-brand-dark shadow-md scale-105" : "text-slate-400 hover:text-white hover:bg-white/5"}`;
+  const navLinkMobile = ({ isActive }) => `text-3xl font-bold flex items-center justify-between py-3 border-b border-white/5 transition-all duration-300 ${isActive ? "text-brand-green pl-2" : "text-white hover:text-slate-300"}`;
 
   return (
     <>
-      {/* 
-        ================================================================
-        1. THE NAVBAR (FIXED HEIGHT)
-        - Mobile Height: h-20 (80px)
-        - Desktop Height: h-24 (96px)
-        - NO shrinking classes added based on scroll
-        ================================================================ 
-      */}
-      <nav
-        className={`fixed top-0 left-0 w-full z-[100] transition-colors duration-300 border-b border-white/5
-          h-20 md:h-24 
-          ${isScrolled || isOpen ? "bg-[#161F33]/95 backdrop-blur-xl shadow-2xl" : "bg-[#161F33]"}
-        `}
-      >
+      <nav className={`fixed top-0 left-0 w-full z-[100] transition-colors duration-300 border-b border-white/5 h-20 md:h-24 
+        ${isScrolled || isOpen ? "bg-[#161F33]/95 backdrop-blur-xl shadow-2xl" : "bg-[#161F33]"}`}>
+        
         <div className="container mx-auto px-4 md:px-8 h-full flex items-center justify-between">
-          {/* --- LEFT: LOGO --- */}
+          
+          {/* LOGO */}
           <div className="flex-1 flex items-center justify-start gap-4 md:gap-6">
-            {/* REPLACE YOUR <img ... /> TAG WITH THIS: */}
-<Link to="/" className="flex-shrink-0 group z-[101]" onClick={closeMenu}>
-  <div className="flex flex-col items-center justify-center leading-none select-none">
-    {/* The Monogram */}
-    <h1 className="text-3xl md:text-4xl font-black tracking-tighter flex items-center gap-0.5">
-      <span className="text-white drop-shadow-md">D</span>
-      <span className="text-brand-green drop-shadow-[0_0_10px_rgba(34,197,94,0.5)]">J</span>
-      <span className="text-white drop-shadow-md">V</span>
-    </h1>
-    
-    {/* The Full Name */}
-    <div className="flex items-center gap-1.5 mt-0.5">
-      <div className="h-[1px] w-3 bg-brand-green/50"></div>
-      <span className="text-[9px] font-bold text-slate-400 tracking-[0.2em] uppercase group-hover:text-white transition-colors">
-        DE JOB VENTURE
-      </span>
-      <div className="h-[1px] w-3 bg-brand-green/50"></div>
-    </div>
-  </div>
-</Link>
-
-            {/* Socials (Desktop Only) */}
-            <div
-              className={`hidden lg:flex items-center gap-3 pl-6 border-l border-white/10 transition-opacity duration-300 ${isScrolled ? "opacity-50" : "opacity-100"}`}
-            >
-              <a
-                href="#"
-                className="text-slate-400 hover:text-brand-green transition-colors"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="text-slate-400 hover:text-brand-green transition-colors"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="text-slate-400 hover:text-brand-green transition-colors"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-            </div>
+            <Link to="/" className="flex-shrink-0 group z-[101]">
+              <div className="flex flex-col items-center justify-center leading-none select-none">
+                <h1 className="text-3xl md:text-4xl font-black tracking-tighter flex items-center gap-0.5">
+                  <span className="text-white drop-shadow-md">D</span>
+                  <span className="text-brand-green drop-shadow-[0_0_10px_rgba(34,197,94,0.5)]">J</span>
+                  <span className="text-white drop-shadow-md">V</span>
+                </h1>
+              </div>
+            </Link>
           </div>
 
-          {/* --- CENTER: DESKTOP NAV --- */}
+          {/* DESKTOP LINKS */}
           <div className="hidden md:flex justify-center">
             <div className="flex items-center gap-1 bg-[#0f1624] rounded-full border border-white/5 shadow-inner p-1.5">
-              <NavLink to="/" className={navLinkDesktop}>
-                Home
-              </NavLink>
-              <NavLink to="/listing" className={navLinkDesktop}>
-                Jobs
-              </NavLink>
-              <NavLink to="/about" className={navLinkDesktop}>
-                About
-              </NavLink>
-              <NavLink to="/contact" className={navLinkDesktop}>
-                Contact
-              </NavLink>
+              <NavLink to="/" className={navLinkDesktop}>Home</NavLink>
+              <NavLink to="/listing" className={navLinkDesktop}>Jobs</NavLink>
+              <NavLink to="/about" className={navLinkDesktop}>About</NavLink>
+              <NavLink to="/contact" className={navLinkDesktop}>Contact</NavLink>
             </div>
           </div>
 
-          {/* --- RIGHT: ACTIONS --- */}
+          {/* RIGHT SIDE ACTIONS */}
           <div className="flex-1 flex items-center justify-end gap-4">
-            <Link
-              to="/login"
-              className="hidden md:flex items-center gap-2 text-sm font-bold text-slate-300 hover:text-white transition-colors"
-            >
-              <User className="w-4 h-4" /> <span>Sign In</span>
-            </Link>
+            
+            {loading ? (
+              // Invisible placeholder
+              <div className="hidden md:block w-32 h-10 opacity-0"></div>
+            ) : user ? (
+              // --- LOGGED IN (DESKTOP) ---
+              <div className="hidden md:flex relative" ref={dropdownRef}>
+                <button 
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className={`flex items-center gap-3 pl-1 pr-4 py-1 rounded-full border transition-all duration-200 group
+                    ${isUserMenuOpen 
+                      ? "bg-brand-green/10 border-brand-green text-white" 
+                      : "bg-[#0f1624] border-white/10 text-slate-300 hover:border-white/20 hover:text-white"}
+                  `}
+                >
+                  <div className="w-8 h-8 rounded-full bg-brand-green flex items-center justify-center text-[#161F33] font-bold text-xs">
+                    {initials}
+                  </div>
+                  <span className="text-sm font-bold max-w-[120px] truncate capitalize">
+                    {displayName}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isUserMenuOpen ? "rotate-180" : ""}`} />
+                </button>
 
-            <Link
-              to="/signup"
-              className="hidden md:flex bg-brand-green hover:bg-white hover:text-brand-dark text-brand-dark font-bold text-xs rounded-full transition-all items-center gap-2 shadow-lg shadow-brand-green/10 px-6 py-3"
-            >
-              Create an account <ArrowRight className="w-4 h-4" />
-            </Link>
+                {/* Dropdown */}
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 top-full mt-3 w-64 bg-[#1F2937] border border-gray-700 rounded-xl shadow-2xl overflow-hidden animate-fade-in z-50">
+                    <div className="p-4 border-b border-gray-700">
+                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Account</p>
+                      <p className="text-sm font-bold text-white truncate">{displayName}</p>
+                      <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                    </div>
+                    <div className="p-2">
+                        <Link to="/profile" className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors">
+                            <User size={16} /> My Profile
+                        </Link>
+                        <button onClick={handleLogout} className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors text-left">
+                          <LogOut size={16} /> Log Out
+                        </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // --- LOGGED OUT (DESKTOP) ---
+              <div className="hidden md:flex items-center gap-4">
+                <Link to="/login" className="text-sm font-bold text-slate-300 hover:text-white transition-colors">
+                  Sign In
+                </Link>
+                <Link to="/signup" className="bg-brand-green hover:bg-white hover:text-brand-dark text-brand-dark font-bold text-xs rounded-full px-5 py-2.5 flex items-center gap-2 transition-all shadow-lg shadow-brand-green/10">
+                  Create an account <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            )}
 
-            {/* MOBILE TOGGLE (Fixed Position) */}
-            <button
-              onClick={toggleMenu}
-              className="md:hidden relative z-[101] bg-white/10 text-white p-2.5 rounded-full hover:bg-white/20 transition-colors border border-white/5 active:scale-95"
-            >
-              {isOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
+            {/* Mobile Toggle */}
+            <button onClick={() => setIsOpen(!isOpen)} className="md:hidden relative z-[101] bg-white/10 text-white p-2.5 rounded-full hover:bg-white/20">
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* 
-        ================================================================
-        2. MOBILE MENU OVERLAY
-        - Padding top matches the Navbar height exactly (pt-20 / pt-24)
-        ================================================================ 
-      */}
-      <div
-        className={`
-          fixed inset-0 z-[90] bg-[#161F33] flex flex-col pt-20 md:pt-24
-          transition-all duration-500 ease-[cubic-bezier(0.33,1,0.68,1)]
-          ${isOpen ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-4 invisible pointer-events-none"}
-        `}
-      >
-        {/* Background Decor */}
-        <div
-          className={`absolute top-0 right-0 w-full h-[50vh] bg-brand-green/5 rounded-full blur-[100px] pointer-events-none transition-opacity duration-1000 ${isOpen ? "opacity-100" : "opacity-0"}`}
-        ></div>
+      {/* MOBILE MENU OVERLAY */}
+      <div className={`fixed inset-0 z-[90] bg-[#161F33] flex flex-col pt-20 md:pt-24 transition-all duration-500 ${isOpen ? "opacity-100 translate-y-0 visible" : "opacity-0 -translate-y-4 invisible pointer-events-none"}`}>
+         
+         {/* Links */}
+         <div className="flex-1 px-6 pt-8 flex flex-col gap-2 overflow-y-auto">
+             {["Home", "Find Jobs", "About Us", "Contact"].map((item) => (
+               <NavLink 
+                 key={item} 
+                 to={item === "Home" ? "/" : item === "Find Jobs" ? "/listing" : `/${item.split(" ")[0].toLowerCase()}`} 
+                 onClick={() => setIsOpen(false)} 
+                 className={navLinkMobile}
+               >
+                 {item} <ChevronRight className="w-5 h-5 text-white/20" />
+               </NavLink>
+             ))}
+         </div>
 
-        {/* --- MOBILE LINKS --- */}
-        <div className="flex-1 px-6 pt-8 flex flex-col gap-2 overflow-y-auto">
-          {["Home", "Find Jobs", "About Us", "Contact"].map((item, idx) => {
-            const path =
-              item === "Home"
-                ? "/"
-                : item === "Find Jobs"
-                  ? "/listing"
-                  : `/${item.split(" ")[0].toLowerCase()}`;
-            return (
-              <NavLink
-                key={item}
-                to={path}
-                onClick={closeMenu}
-                className={navLinkMobile}
-                style={{
-                  transitionDelay: `${idx * 50}ms`,
-                  transform: isOpen ? "translateY(0)" : "translateY(10px)",
-                  opacity: isOpen ? 1 : 0,
-                }}
-              >
-                {item}
-                <ChevronRight className="w-5 h-5 text-white/20" />
-              </NavLink>
-            );
-          })}
-        </div>
-
-        {/* --- MOBILE FOOTER --- */}
-        <div
-          className={`p-6 pb-10 space-y-4 bg-black/20 border-t border-white/5 transition-all duration-500 delay-200 ${isOpen ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
-        >
-          <Link
-            to="/signup"
-            onClick={closeMenu}
-            className="w-full bg-brand-green text-brand-dark font-bold text-lg py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform"
-          >
-            Create an account
-          </Link>
-          <div className="grid grid-cols-2 gap-4">
-            <Link
-              to="/login"
-              onClick={closeMenu}
-              className="flex items-center justify-center py-3 bg-white/5 text-white font-bold rounded-xl border border-white/10 active:bg-white/10"
-            >
-              Log In
-            </Link>
-            <Link
-              to="/post-job"
-              onClick={closeMenu}
-              className="flex items-center justify-center py-3 bg-white/5 text-white font-bold rounded-xl border border-white/10 active:bg-white/10"
-            >
-              Employers
-            </Link>
-          </div>
-
-          {/* Mobile Socials */}
-          <div className="flex justify-center gap-6 pt-4 text-slate-400">
-            <Instagram className="w-6 h-6 hover:text-brand-green transition-colors" />
-            <Twitter className="w-6 h-6 hover:text-brand-green transition-colors" />
-            <Linkedin className="w-6 h-6 hover:text-brand-green transition-colors" />
-          </div>
-        </div>
+         {/* ─── MOBILE BOTTOM SECTION ─── */}
+         <div className="p-6 pb-10 space-y-4 bg-black/20 border-t border-white/5">
+            {loading ? (
+                <div className="w-full h-14 bg-white/5 rounded-xl animate-pulse" />
+            ) : user ? (
+                // LOGGED IN: Profile Bar + Logout
+                <div className="flex items-center justify-between p-2 rounded-2xl bg-white/5 border border-white/10">
+                    
+                    {/* Left: Avatar & Name -> Link to Profile */}
+                    <Link to="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-3 group pl-2">
+                        <div className="w-10 h-10 rounded-full bg-brand-green flex items-center justify-center text-[#161F33] font-bold text-sm shadow-lg group-active:scale-95 transition-transform">
+                            {initials}
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-white font-bold text-sm leading-tight max-w-[140px] truncate capitalize">{displayName}</span>
+                            <span className="text-[10px] text-brand-green font-medium">View Profile</span>
+                        </div>
+                    </Link>
+                    
+                    {/* Right: Logout Button */}
+                    <button 
+                        onClick={handleLogout} 
+                        className="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 border border-red-500/20 active:bg-red-500/20 transition-colors mr-1"
+                    >
+                        <LogOut size={18} />
+                    </button>
+                </div>
+            ) : (
+                // LOGGED OUT: Login + Signup
+                <>
+                  <Link to="/signup" onClick={() => setIsOpen(false)} className="w-full bg-brand-green text-brand-dark font-bold text-lg py-4 rounded-xl flex items-center justify-center">Create Account</Link>
+                  <Link to="/login" onClick={() => setIsOpen(false)} className="w-full bg-white/5 text-white font-bold text-lg py-4 rounded-xl flex items-center justify-center border border-white/10">Sign In</Link>
+                </>
+            )}
+         </div>
       </div>
 
-      {/* 
-        3. LAYOUT SPACER 
-        Pushes content down by h-20 (Mobile) or h-24 (Desktop)
-        so the first section isn't hidden.
-      */}
       <div className="h-20 md:h-24 w-full"></div>
     </>
   );
