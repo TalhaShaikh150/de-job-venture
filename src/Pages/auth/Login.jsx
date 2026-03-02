@@ -5,8 +5,11 @@ import { loginSchema } from "./loginSchema";
 import { loginWithGoogle, signUserInDB } from "@/backend/services";
 import { useState } from "react";
 import {Eye,EyeOff} from "lucide-react"
-
+import { useNavigate } from "react-router-dom";
 function Login() {
+
+  const navigate = useNavigate()
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [formMessage, setFormMessage] = useState("");
@@ -25,8 +28,9 @@ function Login() {
       setFormMessage("");
 
       const data = await signUserInDB(formData);
-
+      navigate("/profile")
       reset();
+      
 
       setFormMessage("Login Successfull");
       // Redirect to the desired URL

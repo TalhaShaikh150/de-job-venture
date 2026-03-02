@@ -123,7 +123,6 @@ const DejobListing = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 selection:bg-brand-green selection:text-white">
-      <Navbar />
       <JobHeader />
 
       <div className="container mx-auto px-4 mt-5 relative z-20 pb-20">

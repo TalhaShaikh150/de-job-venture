@@ -11,7 +11,6 @@ import Faq from "@/components/contact/Faq";
 const ContactUs = () => {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-brand-green selection:text-white">
-      <Navbar />
       <ContactHeader />
       <ContactMap />
       <Faq />

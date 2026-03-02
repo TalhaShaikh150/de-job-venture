@@ -10,7 +10,6 @@ import Vision from "@/components/about/Vision";
 function AboutUs() {
   return (
     <>
-      <Navbar />
       <AboutHeader />
 
       <Content />

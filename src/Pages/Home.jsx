@@ -17,7 +17,6 @@ const Home = () => {
   return (
     <>
       {/* Before */}
-      <Navbar />
       <Hero />
       <Recruiters />
       <WhoWeAre />
