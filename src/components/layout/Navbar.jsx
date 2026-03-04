@@ -203,7 +203,7 @@ const Navbar = () => {
                       : "bg-[#0f1624] border-white/10 text-slate-300 hover:border-white/20 hover:text-white"}
                   `}
                 >
-                  <div className="w-8 h-8 rounded-full bg-brand-green overflow-hidden flex items-center justify-center text-[#161F33] font-bold text-xs">
+                  <div className="w-10 h-10 rounded-full bg-brand-green overflow-hidden flex items-center justify-center text-[#161F33] font-bold text-xs">
                     {avatarUrl ? (
                       <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                     ) : (
@@ -251,6 +251,7 @@ const Navbar = () => {
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
+          
         </div>
       </nav>
 
