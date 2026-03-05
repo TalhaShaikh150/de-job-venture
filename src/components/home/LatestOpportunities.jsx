@@ -91,6 +91,7 @@ const LatestOpportunities = () => {
         <div className="flex flex-col gap-4">
           {featuredJobs.map((job) => {
             const Icon = getIconForJob(job.title);
+            console.log(job)
 
             return (
               <div
@@ -100,7 +101,7 @@ const LatestOpportunities = () => {
               >
                 {/* Icon Area */}
                 <div className="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center text-brand-green shrink-0 border border-white/5">
-                  <Icon className="w-7 h-7" />
+                  <img src={job.company_logo} className="w-full h-full" />
                 </div>
 
                 {/* Main Info */}

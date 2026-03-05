@@ -228,7 +228,7 @@ const JobCards = ({ job }) => {
           <Clock className="w-3.5 h-3.5" /> {timeAgo(created_at)}
         </span>
 
-        <button className="text-xs font-bold text-white bg-brand-dark px-5 py-2.5 rounded-xl hover:bg-brand-green hover:text-brand-dark transition-all shadow-md shadow-brand-dark/10 active:scale-95">
+        <button className="text-xs font-bold text-white bg-brand-dark px-5 py-2.5 rounded-xl hover:bg-brand-green hover:text-white transition-all shadow-md shadow-brand-dark/10 active:scale-95">
           View Details
         </button>
       </div>
